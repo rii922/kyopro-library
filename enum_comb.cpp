@@ -7,9 +7,7 @@ void dfs_comb(vector<T> &arr, int idx, int r, vector<T> &pattern, vector<vector<
 		result.push_back(pattern);
 		return;
 	}
-	if ((idx + r) > arr.size()) {
-		return;
-	}
+	if (idx+r > arr.size()) return;
 	pattern.push_back(arr[idx]);
 	dfs_comb(arr, idx+1, r-1, pattern, result);
 	pattern.pop_back();
