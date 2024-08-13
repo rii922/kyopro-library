@@ -1,0 +1,133 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+template<class S, S (*op)(S, S), S (*e)()>
+struct persistent_segtree {
+	persistent_segtree(int n) {
+		_init(n);
+		_root.push_back(_generate(_height));
+	}
+	persistent_segtree(vector<S> &v) {
+		_init(v.size());
+		_root.push_back(_generate(_height, v, 0, _n));
+	}
+	persistent_segtree(int n, S x) {
+		_init(n);
+		_root.push_back(_generate(_height, x, 0, _n));
+	}
+	void set_version(int version) {
+		assert(version < _root.size());
+		_version = version;
+	}
+	int version() {
+		return _version;
+	}
+	int newest_version() {
+		return _root.size() - 1;
+	}
+	int set(int p, S x, int old_version=-1) {
+		assert(0 <= p && p < _sz);
+		if (old_version == -1) old_version = _version;
+		node *old_t = _root[old_version];
+		node *new_t = new node();
+		_root.push_back(new_t);
+		vector<bool> v(_height-1);
+		for (int i = 0; i < _height-1; i++) {
+			v[i] = p & 1;
+			p >>= 1;
+		}
+		vector<node *> pass(_height-1);
+		for (int i = _height-2; i >= 0; i--) {
+			pass[i] = new_t;
+			if (v[i]) {
+				new_t->left = old_t->left;
+				new_t->right = new node();
+				old_t = old_t->right;
+				new_t = new_t->right;
+			}
+			else {
+				new_t->right = old_t->right;
+				new_t->left = new node();
+				old_t = old_t->left;
+				new_t = new_t->left;
+			}
+		}
+		new_t->val = x;
+		for (int i = 0; i < _height-1; i++) {
+			pass[i]->val = op(pass[i]->left->val, pass[i]->right->val);
+		}
+		return _version = _root.size() - 1;
+	}
+	S get(int p, int version=-1) {
+		assert(0 <= p && p < _sz);
+		if (version == -1) version = _version;
+		vector<bool> v(_height-1);
+		for (int i = 0; i < _height-1; i++) {
+			v[i] = p & 1;
+			p >>= 1;
+		}
+		node *t = _root[version];
+		for (int i = _height-2; i >= 0; i--) t = v[i] ? t->right : t->left;
+		return t->val;
+	}
+	S prod(int l, int r, int version=-1) {
+		assert(0 <= l && l <= r && r <= _sz);
+		if (version == -1) version = _version;
+		return _prod(_root[version], l, r, 0, _n);
+	}
+	S all_prod(int version=-1) {
+		if (version == -1) version = _version;
+		return _root[version]->val;
+	}
+private:
+	struct node {
+		S val;
+		node *left, *right;
+		node (S val=e(), node *left=nullptr, node *right=nullptr) : val(val), left(left), right(right) {}
+	};
+	vector<node *> _root;
+	int _sz, _n, _height;
+	int _version = 0;
+	void _init(int n) {
+		_sz = n;
+		_n = 1;
+		_height = 1;
+		while (_n < _sz) {
+			_n *= 2;
+			_height++;
+		}
+	}
+	node *_generate(int height) {
+		if (height == 0) return nullptr;
+		node *t = new node();
+		t->left = _generate(height-1);
+		t->right = _generate(height-1);
+		return t;
+	}
+	node *_generate(int height, vector<S> &v, int l, int r) {
+		if (height == 0) return nullptr;
+		node *t = new node();
+		if (height == 1 && l < _sz) t->val = v[l];
+		int m = (l + r) / 2;
+		t->left = _generate(height-1, v, l, m);
+		t->right = _generate(height-1, v, m, r);
+		if (t->left != nullptr) t->val = op(t->left->val, t->right->val);
+		return t;
+	}
+	node *_generate(int height, S x, int l, int r) {
+		if (height == 0) return nullptr;
+		node *t = new node();
+		if (height == 1 && l < _sz) t->val = x;
+		int m = (l + r) / 2;
+		t->left = _generate(height-1, x, l, m);
+		t->right = _generate(height-1, x, m, r);
+		if (t->left != nullptr) t->val = op(t->left->val, t->right->val);
+		return t;
+	}
+	S _prod(node *t, int l, int r, int lt, int rt) {
+		if (lt >= r || rt <= l) return e();
+		if (lt >= l && rt <= r) return t->val;
+		int mt = (lt + rt) / 2;
+		return op(_prod(t->left, l, r, lt, mt), _prod(t->right, l, r, mt, rt));
+	}
+};

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <typename T>
+template<class T>
 vector<T> compress_2d(vector<T> &C1, vector<T> &C2) {
 	vector<T> vals;
 	for (int i = 0; i < C1.size(); i++) {

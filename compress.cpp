@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <typename T>
+template<class T>
 vector<T> compress(vector<T> &X) {
 	vector<T> vals = X;
 	sort(vals.begin(), vals.end());

@@ -1,11 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<int mod>
-struct static_mint {
-	using mint = static_mint<mod>;
+template<int id>
+struct dynamic_mint {
+	using mint = dynamic_mint<id>;
+	static int mod;
+	static void set_mod(int m) {
+		mod = m;
+	}
 	long long x;
-	static_mint(long long x = 0) : x((x%mod+mod)%mod) {}
+	dynamic_mint(long long x = 0) : x((x%mod+mod)%mod) {}
 	mint operator+() const { return mint(x); }
 	mint operator-() const { return mint(-x); }
 	mint &operator+=(const mint a) {
@@ -69,5 +73,5 @@ struct static_mint {
 		return os;
 	}
 };
-using mint = static_mint<1000000007>;
-using mint = static_mint<998244353>;
+template<int id> int dynamic_mint<id>::mod = 998244353;
+using mint = dynamic_mint<-1>;

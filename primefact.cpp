@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <typename T>
-struct PrimeFact {
+template<class T>
+struct primefact {
 	vector<T> spf;
-	PrimeFact(T N) { init(N); }
+	primefact(T N) { init(N); }
 	void init(T N) {
 		spf.assign(N+1, 0);
 		for (T i = 0; i <= N; i++) spf[i] = i;
