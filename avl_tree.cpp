@@ -53,8 +53,12 @@ private:
 		node(T val, node *left=nullptr, node *right=nullptr) : val(val), left(left), right(right), height(1), size(1) {}
 	};
 	node *_root;
-	int _height(node *t) { return t == nullptr ? 0 : t->height; }
-	int _size(node *t) { return t == nullptr ? 0 : t->size; }
+	int _height(node *t) {
+		return t == nullptr ? 0 : t->height;
+	}
+	int _size(node *t) {
+		return t == nullptr ? 0 : t->size;
+	}
 	node *_update(node *t) {
 		t->height = max(_height(t->left), _height(t->right)) + 1;
 		t->size = _size(t->left) + _size(t->right) + 1;
