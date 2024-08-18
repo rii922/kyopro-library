@@ -54,6 +54,16 @@ struct lazy_segtree {
 		assert(0 <= l && l <= r && r <= _sz);
 		_apply(l, r, f, 0, 0, _n);
 	}
+	int max_right(int l, bool (*f)(S)) {
+		assert(0 <= l && l <= _sz);
+		S pr = e();
+		return _max_right(l, f, 0, 0, _n, pr);
+	}
+	int min_left(int r, bool (*f)(S)) {
+		assert(0 <= r && r <= _sz);
+		S pr = e();
+		return _min_left(r, f, 0, 0, _n, pr);
+	}
 private:
 	int _sz, _n;
 	vector<S> _node;
@@ -90,5 +100,39 @@ private:
 		_eval(p);
 		int mp = (lp + rp) / 2;
 		return _node[p] = op(_apply(l, r, f, p*2+1, lp, mp), _apply(l, r, f, p*2+2, mp, rp));
+	}
+	int _max_right(int l, bool (*f)(S), int p, int lp, int rp, S &pr) {
+		if (lp >= _sz) return _sz;
+		if (rp <= l) return l;
+		if (lp >= l && rp <= _sz) {
+			S npr = op(pr, _node[p]);
+			if (f(npr)) {
+				pr = npr;
+				return rp;
+			}
+			if (rp - lp == 1) return lp;
+		}
+		_eval(p);
+		int mp = (lp + rp) / 2;
+		int m = _max_right(l, f, p*2+1, lp, mp, pr);
+		if (m < mp) return m;
+		return _max_right(l, f, p*2+2, mp, rp, pr);
+	}
+	int _min_left(int r, bool (*f)(S), int p, int lp, int rp, S &pr) {
+		if (lp >= r) return r;
+		if (rp <= 0) return 0;
+		if (rp <= r) {
+			S npr = op(pr, _node[p]);
+			if (f(npr)) {
+				pr = npr;
+				return lp;
+			}
+			if (rp - lp == 1) return rp;
+		}
+		_eval(p);
+		int mp = (lp + rp) / 2;
+		int m = _min_left(r, f, p*2+2, mp, rp, pr);
+		if (m > mp) return m;
+		return _min_left(r, f, p*2+1, lp, mp, pr);
 	}
 };

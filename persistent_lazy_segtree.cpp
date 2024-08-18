@@ -89,6 +89,18 @@ struct persistent_lazy_segtree {
 		_root.push_back(_apply(_root[version], l, r, f, 0, _n));
 		return _version = _root.size() - 1;
 	}
+	int max_right(int l, bool (*f)(S), int version=-1) {
+		assert(0 <= l && l <= _sz);
+		if (version == -1) version = _version;
+		S pr = e();
+		return _max_right(_root[version], l, f, 0, _n, pr);
+	}
+	int min_left(int r, bool (*f)(S), int version=-1) {
+		assert(0 <= r && r <= _sz);
+		if (version == -1) version = _version;
+		S pr = e();
+		return _min_left(_root[version], r, f, 0, _n, pr);
+	}
 private:
 	struct node {
 		S val;
@@ -157,5 +169,39 @@ private:
 		node *left = _apply(t->left, l, r, f, lt, mt);
 		node *right = _apply(t->right, l, r, f, mt, rt);
 		return new node(op(left->val, right->val), nullopt, left, right);
+	}
+	int _max_right(node *t, int l, bool (*f)(S), int lt, int rt, S &pr) {
+		if (lt >= _sz) return _sz;
+		if (rt <= l) return l;
+		if (lt >= l && rt <= _sz) {
+			S npr = op(pr, t->val);
+			if (f(npr)) {
+				pr = npr;
+				return rt;
+			}
+			if (rt - lt == 1) return lt;
+		}
+		_eval(t);
+		int mt = (lt + rt) / 2;
+		int m = _max_right(t->left, l, f, lt, mt, pr);
+		if (m < mt) return m;
+		return _max_right(t->right, l, f, mt, rt, pr);
+	}
+	int _min_left(node *t, int r, bool (*f)(S), int lt, int rt, S &pr) {
+		if (lt >= r) return r;
+		if (rt <= 0) return 0;
+		if (rt <= r) {
+			S npr = op(pr, t->val);
+			if (f(npr)) {
+				pr = npr;
+				return lt;
+			}
+			if (rt - lt == 1) return rt;
+		}
+		_eval(t);
+		int mt = (lt + rt) / 2;
+		int m = _min_left(t->right, r, f, mt, rt, pr);
+		if (m > mt) return m;
+		return _min_left(t->left, r, f, lt, mt, pr);
 	}
 };

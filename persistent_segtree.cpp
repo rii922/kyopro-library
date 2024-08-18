@@ -79,6 +79,18 @@ struct persistent_segtree {
 		if (version == -1) version = _version;
 		return _root[version]->val;
 	}
+	int max_right(int l, bool (*f)(S), int version=-1) {
+		assert(0 <= l && l <= _sz);
+		if (version == -1) version = _version;
+		S pr = e();
+		return _max_right(_root[version], l, f, 0, _n, pr);
+	}
+	int min_left(int r, bool (*f)(S), int version=-1) {
+		assert(0 <= r && r <= _sz);
+		if (version == -1) version = _version;
+		S pr = e();
+		return _min_left(_root[version], r, f, 0, _n, pr);
+	}
 private:
 	struct node {
 		S val;
@@ -129,5 +141,37 @@ private:
 		if (lt >= l && rt <= r) return t->val;
 		int mt = (lt + rt) / 2;
 		return op(_prod(t->left, l, r, lt, mt), _prod(t->right, l, r, mt, rt));
+	}
+	int _max_right(node *t, int l, bool (*f)(S), int lt, int rt, S &pr) {
+		if (lt >= _sz) return _sz;
+		if (rt <= l) return l;
+		if (lt >= l && rt <= _sz) {
+			S npr = op(pr, t->val);
+			if (f(npr)) {
+				pr = npr;
+				return rt;
+			}
+			if (rt - lt == 1) return lt;
+		}
+		int mt = (lt + rt) / 2;
+		int m = _max_right(t->left, l, f, lt, mt, pr);
+		if (m < mt) return m;
+		return _max_right(t->right, l, f, mt, rt, pr);
+	}
+	int _min_left(node *t, int r, bool (*f)(S), int lt, int rt, S &pr) {
+		if (lt >= r) return r;
+		if (rt <= 0) return 0;
+		if (rt <= r) {
+			S npr = op(pr, t->val);
+			if (f(npr)) {
+				pr = npr;
+				return lt;
+			}
+			if (rt - lt == 1) return rt;
+		}
+		int mt = (lt + rt) / 2;
+		int m = _min_left(t->right, r, f, mt, rt, pr);
+		if (m > mt) return m;
+		return _min_left(t->left, r, f, lt, mt, pr);
 	}
 };
