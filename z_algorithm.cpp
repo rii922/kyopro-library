@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> z_algorithm(string &s) {
+vector<int> z_algorithm(const string &s) {
 	vector<int> z(s.size());
 	z[0] = s.size();
 	int i = 1;
