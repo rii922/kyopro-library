@@ -103,7 +103,7 @@ private:
 		return (a + _ulong(_uint(a) * _uint(-_ninv)) * mod) >> _sz;
 	}
 };
-template<class _int, class _uint, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _ulong, mod>::_r2 = -_ulong(mod) % mod;;
+template<class _int, class _uint, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _ulong, mod>::_r2 = -_ulong(mod) % mod;
 template<class _int, class _uint, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _ulong, mod>::_ninv = []() {
 	_uint res = mod;
 	while (mod * res != 1) res *= _uint(2) - mod * res;
@@ -112,5 +112,7 @@ template<class _int, class _uint, class _ulong, _uint mod> _uint static_montgome
 template<class _int, class _uint, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _ulong, mod>::_sz = sizeof(_uint) * 8;
 template<uint32_t mod> using static_mint = static_montgomery_mint<int32_t, uint32_t, uint64_t, mod>;
 template<uint64_t mod> using static_mint64 = static_montgomery_mint<int64_t, uint64_t, __uint128_t, mod>;
+using mint = static_mint<1000000007>;
+using mint64 = static_mint64<1000000007>;
 using mint = static_mint<998244353>;
 using mint64 = static_mint64<998244353>;

@@ -4,20 +4,20 @@ using namespace std;
 template<int mod>
 struct static_mint {
 	using mint = static_mint<mod>;
-	long long x;
-	static_mint(long long x = 0) : x((x%mod+mod)%mod) {}
-	mint operator+() const { return mint(x); }
-	mint operator-() const { return mint(-x); }
+	static_mint(long long x = 0) : _x((x%mod+mod)%mod) {}
+	long long val() const { return _x; }
+	mint operator+() const { return mint(_x); }
+	mint operator-() const { return mint(-_x); }
 	mint &operator+=(const mint a) {
-		if ((x += a.x) >= mod) x -= mod;
+		if ((_x += a._x) >= mod) _x -= mod;
 		return *this;
 	}
 	mint &operator-=(const mint a) {
-		if ((x += mod - a.x) >= mod) x -= mod;
+		if ((_x += mod - a._x) >= mod) _x -= mod;
 		return *this;
 	}
 	mint &operator*=(const mint a) {
-		(x *= a.x) %= mod;
+		(_x *= a._x) %= mod;
 		return *this;
 	}
 	mint &operator++() {
@@ -56,8 +56,8 @@ struct static_mint {
 	mint &operator/=(const mint a) { return *this *= a.inv(); }
 	mint operator/(const mint a) const { return mint(*this) /= a; }
 	friend mint operator/(const long long a, const mint b) { return mint(a) / b; }
-	bool operator==(const mint a) const { return x == a.x; }
-	bool operator!=(const mint a) const { return x != a.x; }
+	bool operator==(const mint a) const { return _x == a._x; }
+	bool operator!=(const mint a) const { return _x != a._x; }
 	friend istream &operator>>(istream &is, mint &a) {
 		long long x;
 		is >> x;
@@ -65,9 +65,11 @@ struct static_mint {
 		return is;
 	}
 	friend ostream &operator<<(ostream &os, const mint &a) {
-		os << a.x;
+		os << a.val();
 		return os;
 	}
+private:
+	long long _x;
 };
 using mint = static_mint<1000000007>;
 using mint = static_mint<998244353>;
