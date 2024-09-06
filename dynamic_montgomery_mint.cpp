@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<class _int, class _uint, class _ulong, int id>
+template<class _int, class _uint, class _long, class _ulong, int id>
 struct dynamic_montgomery_mint {
-	using mint = dynamic_montgomery_mint<_int, _uint, _ulong, id>;
+	using mint = dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>;
 	static _uint mod;
 	static void set_mod(_uint m) {
 		assert(m < _uint(1) << (_sz - 2));
@@ -14,7 +14,7 @@ struct dynamic_montgomery_mint {
 		while (mod * _ninv != 1) _ninv *= _uint(2) - mod * _ninv;
 	}
 	dynamic_montgomery_mint() : _xr(0) {}
-	dynamic_montgomery_mint(_int x) : _xr(_reduce(_ulong(x%_int(mod)+mod)*_r2)) {}
+	dynamic_montgomery_mint(_long x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	_uint val() const {
 		_uint x = _reduce(_xr);
 		return x >= mod ? x - mod : x;
@@ -22,11 +22,11 @@ struct dynamic_montgomery_mint {
 	mint operator+() const { return mint(*this); }
 	mint operator-() const { return mint(0) - mint(*this); }
 	mint &operator+=(const mint &a) {
-		if (((_xr += a._xr - mod * 2) >> (_sz - 1)) & 1) _xr += mod * 2;
+		if (_int(_xr += a._xr - mod * 2) < 0) _xr += mod * 2;
 		return *this;
 	}
 	mint &operator-=(const mint &a) {
-		if (((_xr -= a._xr) >> (_sz - 1)) & 1) _xr += mod * 2;
+		if (_int(_xr -= a._xr) < 0) _xr += mod * 2;
 		return *this;
 	}
 	mint &operator*=(const mint &a) {
@@ -54,10 +54,10 @@ struct dynamic_montgomery_mint {
 	mint operator+(const mint &a) const { return mint(*this) += a; }
 	mint operator-(const mint &a) const { return mint(*this) -= a; }
 	mint operator*(const mint &a) const { return mint(*this) *= a; }
-	friend mint operator+(const _int a, const mint b) { return mint(a) + b; }
-	friend mint operator-(const _int a, const mint b) { return mint(a) - b; }
-	friend mint operator*(const _int a, const mint b) { return mint(a) * b; }
-	mint pow(_int t) const {
+	friend mint operator+(const _long a, const mint b) { return mint(a) + b; }
+	friend mint operator-(const _long a, const mint b) { return mint(a) - b; }
+	friend mint operator*(const _long a, const mint b) { return mint(a) * b; }
+	mint pow(_long t) const {
 		if (t < 0) return pow(-t).inv();
 		mint res = 1;
 		mint mul = *this;
@@ -87,7 +87,7 @@ struct dynamic_montgomery_mint {
 		return *this;
 	}
 	mint operator/(const mint &a) const { return mint(*this) /= a; }
-	friend mint operator/(const _int a, const mint b) { return mint(a) / b; }
+	friend mint operator/(const _long a, const mint b) { return mint(a) / b; }
 	bool operator==(const mint &a) const {
 		return (_xr >= mod ? _xr - mod : _xr) == (a._xr >= mod ? a._xr - mod : a._xr);
 	}
@@ -112,11 +112,11 @@ private:
 		return (a + _ulong(_uint(a) * _uint(-_ninv)) * mod) >> _sz;
 	}
 };
-template<class _int, class _uint, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _ulong, id>::mod = 0;
-template<class _int, class _uint, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _ulong, id>::_r2 = 0;
-template<class _int, class _uint, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _ulong, id>::_ninv = 0;
-template<class _int, class _uint, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _ulong, id>::_sz = sizeof(_uint) * 8;
-template<int id> using dynamic_mint = dynamic_montgomery_mint<int32_t, uint32_t, uint64_t, id>;
-template<int id> using dynamic_mint64 = dynamic_montgomery_mint<int64_t, uint64_t, __uint128_t, id>;
+template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::mod = 0;
+template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_r2 = 0;
+template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_ninv = 0;
+template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_sz = sizeof(_uint) * 8;
+template<int id> using dynamic_mint = dynamic_montgomery_mint<int32_t, uint32_t, int64_t, uint64_t, id>;
+template<int id> using dynamic_mint64 = dynamic_montgomery_mint<int64_t, uint64_t, __int128_t, __uint128_t, id>;
 using mint = dynamic_mint<-1>;
 using mint64 = dynamic_mint64<-1>;
