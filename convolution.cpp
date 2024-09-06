@@ -166,9 +166,9 @@ template<int mod> const static_mint<mod> ntt_friendly_convolution<mod>::PR = [](
 	}
 }();
 template<int mod>
-struct arbitrary_convoultion {
+struct arbitrary_convolution {
 	using mint = static_mint<mod>;
-	arbitrary_convoultion() {}
+	arbitrary_convolution() {}
 	vector<mint> operator()(vector<mint> &a, vector<mint> &b) const {
 		vector<int> ia(a.size()), ib(b.size());
 		for (int i = 0; i < a.size(); i++) ia[i] = a[i].val();
@@ -209,4 +209,4 @@ private:
 	const int _r02r12 = (long long)_r02 * _r12 % 754974721;
 };
 using convolution = ntt_friendly_convolution<998244353>;
-using convolution = arbitrary_convoultion<1000000007>;
+using convolution = arbitrary_convolution<1000000007>;
