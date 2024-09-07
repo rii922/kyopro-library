@@ -164,6 +164,6 @@ private:
 };
 template<class convolution, int mod> const convolution fps_base<convolution, mod>::_conv = convolution();
 template<int mod> using ntt_friendly_fps = fps_base<ntt_friendly_convolution<mod>, mod>;
-template<int mod> using arbitrary_fps = fps_base<arbitrary_convoultion<mod>, mod>;
+template<int mod> using arbitrary_fps = fps_base<arbitrary_convolution<mod>, mod>;
 using fps = ntt_friendly_fps<998244353>;
 using fps = arbitrary_fps<1000000007>;

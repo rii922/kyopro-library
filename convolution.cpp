@@ -5,7 +5,7 @@ template<int mod>
 struct ntt_friendly_convolution {
 	using mint = static_mint<mod>;
 	ntt_friendly_convolution() {}
-	vector<mint> operator()(vector<mint> &a, vector<mint> &b) const {
+	vector<mint> operator()(const vector<mint> &a, const vector<mint> &b) const {
 		int n = a.size() + b.size() - 1;
 		int n2 = 1;
 		while (n2 < n) n2 *= 2;
@@ -25,7 +25,7 @@ struct ntt_friendly_convolution {
 		for (int i = 0; i < n; i++) c[i] = a2[i] * ni;
 		return c;
 	}
-	vector<int> operator()(vector<int> &a, vector<int> &b) const {
+	vector<int> operator()(const vector<int> &a, const vector<int> &b) const {
 		int n = a.size() + b.size() - 1;
 		int n2 = 1;
 		while (n2 < n) n2 *= 2;
@@ -169,7 +169,7 @@ template<int mod>
 struct arbitrary_convolution {
 	using mint = static_mint<mod>;
 	arbitrary_convolution() {}
-	vector<mint> operator()(vector<mint> &a, vector<mint> &b) const {
+	vector<mint> operator()(const vector<mint> &a, const vector<mint> &b) const {
 		vector<int> ia(a.size()), ib(b.size());
 		for (int i = 0; i < a.size(); i++) ia[i] = a[i].val();
 		for (int i = 0; i < b.size(); i++) ib[i] = b[i].val();
@@ -185,7 +185,7 @@ struct arbitrary_convolution {
 		}
 		return c;
 	}
-	vector<int> operator()(vector<int> &a, vector<int> &b) const {
+	vector<int> operator()(const vector<int> &a, const vector<int> &b) const {
 		vector<int> c0 = _conv0(a, b);
 		vector<int> c1 = _conv1(a, b);
 		vector<int> c2 = _conv2(a, b);
@@ -208,5 +208,3 @@ private:
 	const int _r12 = static_mint<754974721>(469762049).inv().val();
 	const int _r02r12 = (long long)_r02 * _r12 % 754974721;
 };
-using convolution = ntt_friendly_convolution<998244353>;
-using convolution = arbitrary_convolution<1000000007>;
