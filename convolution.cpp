@@ -208,3 +208,5 @@ private:
 	const int _r12 = static_mint<754974721>(469762049).inv().val();
 	const int _r02r12 = (long long)_r02 * _r12 % 754974721;
 };
+using convolution = ntt_friendly_convolution<998244353>;
+using convolution = arbitrary_convolution<1000000007>;
