@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<int mod>
-struct ntt_friendly_convolution {
+template<class _int, class _uint, class _long, template<_uint mod> class static_mint, _uint mod>
+struct ntt_friendly_convolution_base {
 	using mint = static_mint<mod>;
-	ntt_friendly_convolution() {}
+	ntt_friendly_convolution_base() {}
 	vector<mint> operator()(const vector<mint> &a, const vector<mint> &b) const {
 		int n = a.size() + b.size() - 1;
 		int n2 = 1;
@@ -12,7 +12,7 @@ struct ntt_friendly_convolution {
 		assert((mod - 1) % n2 == 0);
 		vector<mint> root(n2+1), a2(n2, 0), b2(n2, 0);
 		root[0] = 1;
-		mint g = PR.pow((mod-1)/n2);
+		mint g = _pr.pow((mod-1)/n2);
 		for (int i = 0; i < n2; i++) root[i+1] = root[i] * g;
 		for (int i = 0; i < a.size(); i++) a2[i] = a[i];
 		for (int i = 0; i < b.size(); i++) b2[i] = b[i];
@@ -25,14 +25,15 @@ struct ntt_friendly_convolution {
 		for (int i = 0; i < n; i++) c[i] = a2[i] * ni;
 		return c;
 	}
-	vector<int> operator()(const vector<int> &a, const vector<int> &b) const {
+	template<class T>
+	vector<T> operator()(const vector<T> &a, const vector<T> &b) const {
 		int n = a.size() + b.size() - 1;
 		int n2 = 1;
 		while (n2 < n) n2 *= 2;
 		assert((mod - 1) % n2 == 0);
 		vector<mint> root(n2+1), a2(n2, 0), b2(n2, 0);
 		root[0] = 1;
-		mint g = PR.pow((mod-1)/n2);
+		mint g = _pr.pow((mod-1)/n2);
 		for (int i = 0; i < n2; i++) root[i+1] = root[i] * g;
 		for (int i = 0; i < a.size(); i++) a2[i] = a[i];
 		for (int i = 0; i < b.size(); i++) b2[i] = b[i];
@@ -41,12 +42,12 @@ struct ntt_friendly_convolution {
 		for (int i = 0; i < n2; i++) a2[i] *= b2[i];
 		_intt(a2, root);
 		mint ni = mint(n2).inv();
-		vector<int> c(n);
+		vector<T> c(n);
 		for (int i = 0; i < n; i++) c[i] = (a2[i] * ni).val();
 		return c;
 	}
 private:
-	static const mint PR;
+	static const mint _pr;
 	void _ntt(vector<mint> &v, vector<mint> &root) const {
 		if (v.size() <= 1) return;
 		if (v.size() == 2) {
@@ -141,11 +142,10 @@ private:
 		}
 	}
 };
-template<int mod> const static_mint<mod> ntt_friendly_convolution<mod>::PR = []() {
-	using mint = ntt_friendly_convolution<mod>::mint;
-	vector<int> primes;
-	int x = mod - 1;
-	for (int i = 2; (long long)i * i <= x; i++) {
+template<class _int, class _uint, class _long, template<_uint mod> class static_mint, _uint mod> const static_mint<mod> ntt_friendly_convolution_base<_int, _uint, _long, static_mint, mod>::_pr = []() {
+	vector<_int> primes;
+	_int x = mod - 1;
+	for (_int i = 2; (_long)i * i <= x; i++) {
 		if (x % i == 0) {
 			primes.push_back(i);
 			while (x % i == 0) x /= i;
@@ -156,8 +156,8 @@ template<int mod> const static_mint<mod> ntt_friendly_convolution<mod>::PR = [](
 	while (true) {
 		mint g = mt();
 		bool ok = true;
-		for (auto &x : primes) {
-			if (g.pow((mod-1)/x) == 1) {
+		for (auto &y : primes) {
+			if (g.pow((mod-1)/y) == 1) {
 				ok = false;
 				break;
 			}
@@ -165,48 +165,79 @@ template<int mod> const static_mint<mod> ntt_friendly_convolution<mod>::PR = [](
 		if (ok) return g;
 	}
 }();
-template<int mod>
-struct arbitrary_convolution {
+template<uint32_t mod> using ntt_friendly_convolution = ntt_friendly_convolution_base<int32_t, uint32_t, int64_t, static_mint, mod>;
+template<uint64_t mod> using ntt_friendly_convolution64 = ntt_friendly_convolution_base<int64_t, uint64_t, __int128_t, static_mint64, mod>;
+template<class _int, class _uint, class _long, template<_uint mod> class ntt_friendly_convolution, template<_uint mod> class static_mint, _uint mod0, _uint mod1, _uint mod2, _uint mod>
+struct arbitrary_convolution_base {
 	using mint = static_mint<mod>;
-	arbitrary_convolution() {}
+	arbitrary_convolution_base() {}
 	vector<mint> operator()(const vector<mint> &a, const vector<mint> &b) const {
-		vector<int> ia(a.size()), ib(b.size());
+		vector<_int> ia(a.size()), ib(b.size());
 		for (int i = 0; i < a.size(); i++) ia[i] = a[i].val();
 		for (int i = 0; i < b.size(); i++) ib[i] = b[i].val();
-		vector<int> ic0 = _conv0(ia, ib);
-		vector<int> ic1 = _conv1(ia, ib);
-		vector<int> ic2 = _conv2(ia, ib);
+		vector<_int> ic0 = _conv0(ia, ib);
+		vector<_int> ic1 = _conv1(ia, ib);
+		vector<_int> ic2 = _conv2(ia, ib);
 		vector<mint> c(ic0.size());
+		_int w = (_long)mod0 * mod1 % mod;
 		for (int i = 0; i < c.size(); i++) {
-			int t0 = ic0[i];
-			int t1 = (long long)(ic1[i] - t0 + 469762049) * _r01 % 469762049;
-			int t2 = ((long long)(ic2[i] - t0 + 754974721) * _r02r12 + (long long)(-t1 + 754974721) * _r12) % 754974721;
-			c[i] = (long long)t0 + (long long)t1 * 167772161 + (long long)t2 * (167772161LL * 469762049LL % mod);
+			_int t0 = ic0[i];
+			_int t1 = (_long)(ic1[i] - t0 + mod1) * _r01 % mod1;
+			_int t2 = ((_long)(ic2[i] - t0 + mod2) * _r02r12 + (_long)(-t1 + mod2) * _r12) % mod2;
+			c[i] = (_long)t0 + (_long)t1 * mod0 + (_long)t2 * w;
 		}
 		return c;
 	}
-	vector<int> operator()(const vector<int> &a, const vector<int> &b) const {
-		vector<int> c0 = _conv0(a, b);
-		vector<int> c1 = _conv1(a, b);
-		vector<int> c2 = _conv2(a, b);
-		vector<int> c(c0.size());
-		int w = 167772161LL * 469762049LL % mod;
+	template<class T>
+	vector<T> operator()(const vector<T> &a, const vector<T> &b) const {
+		vector<T> c0 = _conv0(a, b);
+		vector<T> c1 = _conv1(a, b);
+		vector<T> c2 = _conv2(a, b);
+		vector<T> c(c0.size());
+		_int w = (_long)mod0 * mod1 % mod;
 		for (int i = 0; i < c.size(); i++) {
-			int t0 = c0[i];
-			int t1 = (long long)(c1[i] - t0 + 469762049) * _r01 % 469762049;
-			int t2 = ((long long)(c2[i] - t0 + 754974721) * _r02r12 + (long long)(-t1 + 754974721) * _r12) % 754974721;
-			c[i] = ((long long)t0 + (long long)t1 * 167772161 + (long long)t2 * w) % mod;
+			_int t0 = c0[i];
+			_int t1 = (_long)(c1[i] - t0 + mod1) * _r01 % mod1;
+			_int t2 = ((_long)(c2[i] - t0 + mod2) * _r02r12 + (_long)(-t1 + mod2) * _r12) % mod2;
+			c[i] = ((_long)t0 + (_long)t1 * mod0 + (_long)t2 * w) % mod;
 		}
 		return c;
 	}
 private:
-	const ntt_friendly_convolution<167772161> _conv0;
-	const ntt_friendly_convolution<469762049> _conv1;
-	const ntt_friendly_convolution<754974721> _conv2;
-	const int _r01 = static_mint<469762049>(167772161).inv().val();
-	const int _r02 = static_mint<754974721>(167772161).inv().val();
-	const int _r12 = static_mint<754974721>(469762049).inv().val();
-	const int _r02r12 = (long long)_r02 * _r12 % 754974721;
+	const ntt_friendly_convolution<mod0> _conv0;
+	const ntt_friendly_convolution<mod1> _conv1;
+	const ntt_friendly_convolution<mod2> _conv2;
+	const _int _r01 = static_mint<mod1>(mod0).inv().val();
+	const _int _r02 = static_mint<mod2>(mod0).inv().val();
+	const _int _r12 = static_mint<mod2>(mod1).inv().val();
+	const _int _r02r12 = (_long)_r02 * _r12 % mod2;
+};
+template<int32_t mod> using arbitrary_convolution = arbitrary_convolution_base<int32_t, uint32_t, int64_t, ntt_friendly_convolution, static_mint, 167772161, 469762049, 754974721, mod>;
+template<int64_t mod> using arbitrary_convolution64 = arbitrary_convolution_base<int64_t, uint64_t, __int128_t, ntt_friendly_convolution64, static_mint64, 4604226931544555521ULL, 4605071356474687489ULL, 4610208274799656961ULL, mod>;
+struct convolution_ull {
+	convolution_ull() {}
+	vector<uint64_t> operator()(const vector<uint64_t> &a, const vector<uint64_t> &b) const {
+		vector<uint64_t> c0 = _conv0(a, b);
+		vector<uint64_t> c1 = _conv1(a, b);
+		vector<uint64_t> c2 = _conv2(a, b);
+		vector<uint64_t> c(c0.size());
+		uint64_t w = 4604226931544555521ULL * 4605071356474687489ULL;
+		for (int i = 0; i < c.size(); i++) {
+			uint64_t t0 = c0[i];
+			uint64_t t1 = (__uint128_t)(c1[i] - t0 + 4605071356474687489ULL) * _r01 % 4605071356474687489ULL;
+			uint64_t t2 = ((__uint128_t)(c2[i] - t0 + 4610208274799656961ULL) * _r02r12 + (__uint128_t)(-t1 + 4610208274799656961ULL) * _r12) % 4610208274799656961ULL;
+			c[i] = (__uint128_t)t0 + (__uint128_t)t1 * 4604226931544555521ULL + (__uint128_t)t2 * w;
+		}
+		return c;
+	}
+private:
+	const ntt_friendly_convolution64<4604226931544555521ULL> _conv0;
+	const ntt_friendly_convolution64<4605071356474687489ULL> _conv1;
+	const ntt_friendly_convolution64<4610208274799656961ULL> _conv2;
+	const uint64_t _r01 = static_mint64<4605071356474687489ULL>(4604226931544555521ULL).inv().val();
+	const uint64_t _r02 = static_mint64<4610208274799656961ULL>(4604226931544555521ULL).inv().val();
+	const uint64_t _r12 = static_mint64<4610208274799656961ULL>(4605071356474687489ULL).inv().val();
+	const uint64_t _r02r12 = (__int128_t)_r02 * _r12 % 4610208274799656961ULL;
 };
 using convolution = ntt_friendly_convolution<998244353>;
 using convolution = arbitrary_convolution<1000000007>;

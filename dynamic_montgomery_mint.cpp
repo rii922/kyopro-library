@@ -5,6 +5,9 @@ template<class _int, class _uint, class _long, class _ulong, int id>
 struct dynamic_montgomery_mint {
 	using mint = dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>;
 	static _uint mod;
+	static _uint get_mod() {
+		return mod;
+	}
 	static void set_mod(_uint m) {
 		assert(m < _uint(1) << (_sz - 2));
 		assert(m & 1);
@@ -14,7 +17,11 @@ struct dynamic_montgomery_mint {
 		while (mod * _ninv != 1) _ninv *= _uint(2) - mod * _ninv;
 	}
 	dynamic_montgomery_mint() : _xr(0) {}
+	dynamic_montgomery_mint(_int x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	dynamic_montgomery_mint(_uint x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	dynamic_montgomery_mint(_long x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	dynamic_montgomery_mint(_ulong x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
+	template<class T> dynamic_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	_uint val() const {
 		_uint x = _reduce(_xr);
 		return x >= mod ? x - mod : x;

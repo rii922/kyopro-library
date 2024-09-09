@@ -4,8 +4,15 @@ using namespace std;
 template<class _int, class _uint, class _long, class _ulong, _uint mod>
 struct static_montgomery_mint {
 	using mint = static_montgomery_mint<_int, _uint, _long, _ulong, mod>;
+	static _uint get_mod() {
+		return mod;
+	}
 	static_montgomery_mint() : _xr(0) {}
+	static_montgomery_mint(_int x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	static_montgomery_mint(_uint x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	static_montgomery_mint(_long x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	static_montgomery_mint(_ulong x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
+	template<class T> static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	_uint val() const {
 		_uint x = _reduce(_xr);
 		return x >= mod ? x - mod : x;
