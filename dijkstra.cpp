@@ -4,7 +4,7 @@ using namespace std;
 template<class T>
 struct dijkstra {
 	static const T INF;
-	dijkstra(int n) : _g(n), _prev(n, -1) {}
+	dijkstra(int n) : _g(n) {}
 	void add_edge(int from, int to, T cost) {
 		_g[from].push_back(edge(to, cost));
 	}
@@ -14,6 +14,7 @@ struct dijkstra {
 	}
 	vector<T> calc(int s) {
 		vector<T> d(_g.size(), INF);
+		_prev = vector<int>(_g.size(), -1);
 		d[s] = 0;
 		priority_queue<pair<T, int>, vector<pair<T, int>>, greater<pair<T, int>>> q;
 		q.push({0, s});
@@ -31,6 +32,28 @@ struct dijkstra {
 			}
 		}
 		return d;
+	}
+	T calc(int s, int t) {
+		vector<T> d(_g.size(), INF);
+		_prev = vector<int>(_g.size(), -1);
+		d[s] = 0;
+		priority_queue<pair<T, int>, vector<pair<T, int>>, greater<pair<T, int>>> q;
+		q.push({0, s});
+		while (!q.empty()) {
+			pair<T, int> p = q.top();
+			q.pop();
+			int v = p.second;
+			if (v == t) return d[v];
+			if (d[v] < p.first) continue;
+			for (auto &e : _g[v]) {
+				if (d[e.to] > d[v]+e.cost) {
+					d[e.to] = d[v]+e.cost;
+					_prev[e.to] = v;
+					q.push({d[e.to], e.to});
+				}
+			}
+		}
+		return INF;
 	}
 	vector<int> get_path(int t) {
 		vector<int> path;
