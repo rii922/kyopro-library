@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "montgomery_mint.cpp"
 using namespace std;
 
 template<class T=int, int base_size=2>

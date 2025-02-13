@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "montgomery_mint.cpp"
 using namespace std;
 
 template<class _int, class _uint, class _long, template<_uint mod> class static_mint, _uint mod>

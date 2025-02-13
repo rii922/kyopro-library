@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "dynamic_montgomery_mint.cpp"
 using namespace std;
 
 bool miller_rabin(long long x) {

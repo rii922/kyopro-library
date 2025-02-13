@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "persistent_vector.cpp"
 using namespace std;
 
 struct persistent_union_find {
