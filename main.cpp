@@ -4,6 +4,7 @@
 #define rrep(i, n) for(int i=((int)(n)-1); i>=0; --i)
 #define rreps(i, n) for(int i=((int)(n)); i>0; --i)
 #define all(v) (v).begin(), (v).end()
+#define el '\n'
 using namespace std;
 using ll = long long;
 using ull = unsigned long long;
