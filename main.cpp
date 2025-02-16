@@ -22,12 +22,12 @@ template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } ret
 template<class T> bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
 template<class T> bool chmaxeq(T &a, const T &b) { if (a<=b) { a=b; return 1; } return 0; }
 template<class T> bool chmineq(T &a, const T &b) { if (b<=a) { a=b; return 1; } return 0; }
-bool yes(bool a=true) { cout << (a?"yes":"no") << endl; return a; }
-bool no(bool a=true) { cout << (a?"no":"yes") << endl; return a; }
-bool Yes(bool a=true) { cout << (a?"Yes":"No") << endl; return a; }
-bool No(bool a=true) { cout << (a?"No":"Yes") << endl; return a; }
-bool YES(bool a=true) { cout << (a?"YES":"NO") << endl; return a; }
-bool NO(bool a=true) { cout << (a?"NO":"YES") << endl; return a; }
+bool yes(bool a=true) { cout << (a?"yes":"no") << el; return a; }
+bool no(bool a=true) { cout << (a?"no":"yes") << el; return a; }
+bool Yes(bool a=true) { cout << (a?"Yes":"No") << el; return a; }
+bool No(bool a=true) { cout << (a?"No":"Yes") << el; return a; }
+bool YES(bool a=true) { cout << (a?"YES":"NO") << el; return a; }
+bool NO(bool a=true) { cout << (a?"NO":"YES") << el; return a; }
 template<class T1, class T2> istream &operator>>(istream &is, pair<T1, T2> &p);
 template<class T1, class T2> ostream &operator<<(ostream &os, const pair<T1, T2> &p);
 template<class T> istream &operator>>(istream &is, vector<T> &v);
