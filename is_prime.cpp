@@ -1,9 +1,26 @@
+/**
+ * @file is_prime.cpp
+ * @author rii922
+ * @brief Miller-Rabin 素数判定法による素数判定を行う。
+ * @date 2025-02-16
+ *
+ * Verified with:
+ * https://judge.yosupo.jp/submission/268025
+ */
+
 #include <bits/stdc++.h>
 #include "dynamic_montgomery_mint.cpp"
 using namespace std;
 
-bool miller_rabin(long long x) {
-	using _mint64 = dynamic_mint64<static_cast<int>(0xc56a4ffc)>;
+/**
+ * @brief Miller-Rabin 素数判定法による素数判定を行う。
+ *
+ * O(log x)
+ * @param x 素数判定する数
+ * @return bool @c x が素数かどうか
+ */
+bool is_prime(long long x) {
+	using _mint64 = dynamic_mint64<static_cast<int>(0x90d3801e)>;
 	if (x == 2) return true;
 	if (x < 2 || x % 2 == 0) return false;
 	_mint64::set_mod(x);
