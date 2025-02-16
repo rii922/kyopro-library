@@ -5,7 +5,7 @@
  * @date 2025-02-16
  *
  * Verified with:
- * https://judge.yosupo.jp/submission/268025
+ * https://judge.yosupo.jp/submission/268061
  */
 
 #include <bits/stdc++.h>
@@ -15,22 +15,22 @@ using namespace std;
 /**
  * @brief Miller-Rabin 素数判定法による素数判定を行う。
  *
- * O(log x)
- * @param x 素数判定する数
- * @return bool @c x が素数かどうか
+ * O(log n)
+ * @param n 素数判定する数
+ * @return bool @c n が素数かどうか
  */
-bool is_prime(long long x) {
+bool is_prime(long long n) {
 	using _mint64 = dynamic_mint64<static_cast<int>(0x90d3801e)>;
-	if (x == 2) return true;
-	if (x < 2 || x % 2 == 0) return false;
-	_mint64::set_mod(x);
-	long long d = x - 1;
+	if (n == 2) return true;
+	if (n < 2 || n % 2 == 0) return false;
+	_mint64::set_mod(n);
+	long long d = n - 1;
 	long long s = 0;
 	while (d % 2 == 0) {
 		d /= 2;
 		s++;
 	}
-	const vector<long long> bases = (x < 1LL << 32) ? vector<long long>{2, 7, 61} : vector<long long>{2, 325, 9375, 28178, 450775, 9780504, 1795265022};
+	const vector<long long> bases = (n < 1LL << 32) ? vector<long long>{2, 7, 61} : vector<long long>{2, 325, 9375, 28178, 450775, 9780504, 1795265022};
 	for (auto &b : bases) {
 		_mint64 a = b;
 		if (a == 0) continue;
