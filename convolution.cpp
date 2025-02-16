@@ -156,6 +156,7 @@ template<class _int, class _uint, class _long, template<_uint mod> class static_
 	mt19937 mt(time(nullptr));
 	while (true) {
 		mint g = mt();
+		if (g == 0) continue;
 		bool ok = true;
 		for (auto &y : primes) {
 			if (g.pow((mod-1)/y) == 1) {
