@@ -1,6 +1,22 @@
+/**
+ * @file montgomery_mint.cpp
+ * @author rii922
+ * @brief Montgomery 乗算によって自動で剰余を取る整数型。 @c mod が実行前に決まっている場合に使用する。
+ * @date 2025-02-16
+ */
+
 #include <bits/stdc++.h>
 using namespace std;
 
+/**
+ * @brief Montgomery 乗算によって自動で剰余を取る汎用クラス。 @c mod が実行前に決まっている場合に使用する。
+ *
+ * @tparam _int @c _uint と同じ精度の符号付き整数型
+ * @tparam _uint @c mod*4 を表現可能な符号無し整数型
+ * @tparam _long @c _int の倍の精度の符号付き整数型
+ * @tparam _ulong @c _uint の倍の精度の符号無し整数型
+ * @tparam mod @c mod*4 が @c _uint に収まるような奇数
+ */
 template<class _int, class _uint, class _long, class _ulong, _uint mod>
 struct static_montgomery_mint {
 	using mint = static_montgomery_mint<_int, _uint, _long, _ulong, mod>;
@@ -55,6 +71,13 @@ struct static_montgomery_mint {
 	friend mint operator+(const _long a, const mint b) { return mint(a) + b; }
 	friend mint operator-(const _long a, const mint b) { return mint(a) - b; }
 	friend mint operator*(const _long a, const mint b) { return mint(a) * b; }
+
+	/**
+	 * @brief 繰り返し 2 乗法によって冪乗を計算する。負の冪乗では逆元の冪乗となり、 @c mod が素数である必要がある。
+	 *
+	 * @param t 指数
+	 * @return mint 冪乗
+	 */
 	mint pow(_long t) const {
 		if (t < 0) return pow(-t).inv();
 		mint res = 1;
@@ -66,6 +89,12 @@ struct static_montgomery_mint {
 		}
 		return res;
 	}
+
+	/**
+	 * @brief 拡張ユークリッドの互除法によって逆元を求める。 @c mod が素数である必要がある。
+	 *
+	 * @return mint 逆元
+	 */
 	mint inv() const {
 		_int x = val();
 		_int y = mod;
@@ -117,9 +146,22 @@ template<class _int, class _uint, class _long, class _ulong, _uint mod> _uint st
 	return res;
 }();
 template<class _int, class _uint, class _long, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _long, _ulong, mod>::_sz = sizeof(_uint) * 8;
+
+/**
+ * @brief Montgomery 乗算によって自動で剰余を取る 32 bit 整数。
+ *
+ * @tparam mod 奇数
+ */
 template<uint32_t mod> using static_mint = static_montgomery_mint<int32_t, uint32_t, int64_t, uint64_t, mod>;
+
+/**
+ * @brief Montgomery 乗算によって自動で剰余を取る 64 bit 整数。
+ *
+ * @tparam mod 奇数
+ */
 template<uint64_t mod> using static_mint64 = static_montgomery_mint<int64_t, uint64_t, __int128_t, __uint128_t, mod>;
-using mint = static_mint<1000000007>;
-using mint64 = static_mint64<1000000007>;
+
+// using mint = static_mint<1000000007>;
+// using mint64 = static_mint64<1000000007>;
 using mint = static_mint<998244353>;
 using mint64 = static_mint64<998244353>;
