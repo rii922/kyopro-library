@@ -1,21 +1,21 @@
 /**
  * @file dynamic_montgomery_mint.cpp
  * @author rii922
- * @brief Montgomery 乗算によって自動で剰余を取る整数型。 @c mod が実行時に決まる場合に使用する。
- * @date 2025-02-16
+ * @brief Montgomery 乗算によって自動で剰余を取る整数型。 `mod` が実行時に決まる場合に使用する。
+ * @date 2025-02-17
  */
 
 #include <bits/stdc++.h>
 using namespace std;
 
 /**
- * @brief Montgomery 乗算によって自動で剰余を取る汎用クラス。 @c mod が実行時に決まる場合に使用する。
+ * @brief Montgomery 乗算によって自動で剰余を取る汎用クラス。 `mod` が実行時に決まる場合に使用する。
  *
- * @tparam _int @c _uint と同じ精度の符号付き整数型
- * @tparam _uint @c mod*4 を表現可能な符号無し整数型
- * @tparam _long @c _int の倍の精度の符号付き整数型
- * @tparam _ulong @c _uint の倍の精度の符号無し整数型
- * @tparam id 型を区別するための ID 。同じ ID を持つインスタンスは同じ @c mod を持つ。
+ * @tparam _int `_uint` と同じ精度の符号付き整数型
+ * @tparam _uint `mod*4` を表現可能な符号無し整数型
+ * @tparam _long `_int` の倍の精度の符号付き整数型
+ * @tparam _ulong `_uint` の倍の精度の符号無し整数型
+ * @tparam id 型を区別するための ID 。同じ ID を持つインスタンスは同じ `mod` を持つ。
  */
 template<class _int, class _uint, class _long, class _ulong, int id>
 struct dynamic_montgomery_mint {
@@ -26,9 +26,9 @@ struct dynamic_montgomery_mint {
 	}
 
 	/**
-	 * @brief @c mod を設定する。インスタンス生成前に呼び出す必要がある。
+	 * @brief `mod` を設定する。インスタンス生成前に呼び出す必要がある。
 	 *
-	 * @param m @c mod*4 が @c _uint に収まるような奇数
+	 * @param m `mod*4` が `_uint` に収まるような奇数
 	 */
 	static void set_mod(_uint m) {
 		assert(m < _uint(1) << (_sz - 2));
@@ -38,6 +38,7 @@ struct dynamic_montgomery_mint {
 		_ninv = mod;
 		while (mod * _ninv != 1) _ninv *= _uint(2) - mod * _ninv;
 	}
+	static mint primitive_root();
 	dynamic_montgomery_mint() : _xr(0) {}
 	dynamic_montgomery_mint(_int x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	dynamic_montgomery_mint(_uint x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
@@ -88,10 +89,10 @@ struct dynamic_montgomery_mint {
 	friend mint operator*(const _long a, const mint b) { return mint(a) * b; }
 
 	/**
-	 * @brief 繰り返し 2 乗法によって冪乗を計算する。負の冪乗では逆元の冪乗となり、 @c mod が素数である必要がある。
+	 * @brief 繰り返し 2 乗法によって冪乗を計算する。負の冪乗では逆元の冪乗となり、 `mod` が素数である必要がある。
 	 *
 	 * @param t 指数
-	 * @return mint 冪乗
+	 * @return 冪乗
 	 */
 	mint pow(_long t) const {
 		if (t < 0) return pow(-t).inv();
@@ -106,9 +107,9 @@ struct dynamic_montgomery_mint {
 	}
 
 	/**
-	 * @brief 拡張ユークリッドの互除法によって逆元を求める。 @c mod が素数である必要がある。
+	 * @brief 拡張ユークリッドの互除法によって逆元を求める。 `mod` が素数である必要がある。
 	 *
-	 * @return mint 逆元
+	 * @return 逆元
 	 */
 	mint inv() const {
 		_int x = val();
@@ -162,14 +163,14 @@ template<class _int, class _uint, class _long, class _ulong, int id> _uint dynam
 /**
  * @brief Montgomery 乗算によって自動で剰余を取る 32 bit 整数。
  *
- * @tparam id 型を区別するための ID 。同じ ID を持つインスタンスは同じ @c mod を持つ。ライブラリ内で使用する場合は、ライブラリ名の SHA256 ハッシュの先頭 8 文字を使い、 @c dynamic_mint<static_cast<int>(0xdeadbeef)> のようにする。
+ * @tparam id 型を区別するための ID 。同じ ID を持つインスタンスは同じ `mod` を持つ。ライブラリ内で使用する場合は、ライブラリ名の SHA256 ハッシュの先頭 8 文字を使い、 `dynamic_mint<static_cast<int>(0xdeadbeef)>` のようにする。
  */
 template<int id> using dynamic_mint = dynamic_montgomery_mint<int32_t, uint32_t, int64_t, uint64_t, id>;
 
 /**
  * @brief Montgomery 乗算によって自動で剰余を取る 64 bit 整数。
  *
- * @tparam id 型を区別するための ID 。同じ ID を持つインスタンスは同じ @c mod を持つ。ライブラリ内で使用する場合は、ライブラリ名の SHA256 ハッシュの先頭 8 文字を使い、 @c dynamic_mint64<static_cast<int>(0xdeadbeef)> のようにする。
+ * @tparam id 型を区別するための ID 。同じ ID を持つインスタンスは同じ `mod` を持つ。ライブラリ内で使用する場合は、ライブラリ名の SHA256 ハッシュの先頭 8 文字を使い、 `dynamic_mint64<static_cast<int>(0xdeadbeef)>` のようにする。
  */
 template<int id> using dynamic_mint64 = dynamic_montgomery_mint<int64_t, uint64_t, __int128_t, __uint128_t, id>;
 

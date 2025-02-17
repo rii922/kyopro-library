@@ -2,7 +2,7 @@
  * @file is_prime.cpp
  * @author rii922
  * @brief Miller-Rabin 素数判定法による素数判定を行う。
- * @date 2025-02-16
+ * @date 2025-02-17
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/268061
@@ -17,7 +17,7 @@ using namespace std;
  *
  * O(log n)
  * @param n 素数判定する数
- * @return bool @c n が素数かどうか
+ * @return `n` が素数かどうか
  */
 bool is_prime(long long n) {
 	using mint64 = dynamic_mint64<static_cast<int>(0x90d3801e)>;

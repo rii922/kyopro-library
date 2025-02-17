@@ -2,7 +2,7 @@
  * @file factorize.cpp
  * @author rii922
  * @brief Pollard's rho 素因数分解法によって素因数分解を行う。
- * @date 2025-02-16
+ * @date 2025-02-17
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/268062
@@ -14,11 +14,11 @@
 using namespace std;
 
 /**
- * @brief Floyd の循環検出法および Richard Brent の変形によって @c n の素因数の 1 つを求める。
+ * @brief Floyd の循環検出法および Richard Brent の変形によって `n` の素因数の 1 つを求める。
  *
  * O(n^(1/4))
  * @param n 合成数
- * @return long long @c n の素因数の 1 つ
+ * @return `n` の素因数の 1 つ
  */
 long long find_prime_factor(long long n) {
 	using mint64 = dynamic_mint64<static_cast<int>(0x3bdc9608)>;
@@ -71,9 +71,9 @@ long long find_prime_factor(long long n) {
  * @brief Pollard's rho 素因数分解法によって素因数分解を行う。
  *
  * O(n^(1/4) polylog n)
- * @tparam T @c n の型
+ * @tparam T `n` の型
  * @param n 素因数分解を行う数
- * @return map<T, int> 素因数をキー、指数を値に持つ @c map
+ * @return 素因数をキー、指数を値に持つ `map`
  */
 template<class T>
 map<T, int> factorize(T n) {

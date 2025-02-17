@@ -1,8 +1,8 @@
 /**
  * @file avl_tree.cpp
  * @author rii922
- * @brief @c n 番目に小さい要素を高速に求められるコンテナ。同じ要素の重複は取り除かない。
- * @date 2025-02-14
+ * @brief `n` 番目に小さい要素を高速に求められるコンテナ。同じ要素の重複は取り除かない。
+ * @date 2025-02-17
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/267681
@@ -13,7 +13,7 @@
 using namespace std;
 
 /**
- * @brief @c n 番目に小さい要素を高速に求められるコンテナ。同じ要素の重複は取り除かない。
+ * @brief `n` 番目に小さい要素を高速に求められるコンテナ。同じ要素の重複は取り除かない。
  *
  * @tparam T 大小比較可能なクラス
  */
@@ -38,7 +38,7 @@ struct avl_tree {
 	}
 
 	/**
-	 * @brief @c n 番目に小さい要素を削除する。
+	 * @brief `n` 番目に小さい要素を削除する。
 	 *
 	 * O(log N)
 	 * @param n 0-indexed
@@ -48,7 +48,7 @@ struct avl_tree {
 	}
 
 	/**
-	 * @brief @c val 以上の最小の要素を 1 個削除する。そのような要素が存在しない場合、削除は行われない。
+	 * @brief `val` 以上の最小の要素を 1 個削除する。そのような要素が存在しない場合、削除は行われない。
 	 *
 	 * O(log N)
 	 * @param val 削除する要素
@@ -58,22 +58,22 @@ struct avl_tree {
 	}
 
 	/**
-	 * @brief @c n 番目に小さい要素を取得する。
+	 * @brief `n` 番目に小さい要素を取得する。
 	 *
 	 * O(log N)
 	 * @param n 0-indexed
-	 * @return T @c n 番目に小さい要素
+	 * @return `n` 番目に小さい要素
 	 */
 	T operator[](int n) {
 		return _nth(_root, n)->val;
 	}
 
 	/**
-	 * @brief @c val 以上の最小の要素が何番目に小さいかを取得する。そのような要素が複数存在する場合、最小のものを返す。そのような要素が存在しない場合、 @c size() を返す。
+	 * @brief `val` 以上の最小の要素が何番目に小さいかを取得する。そのような要素が複数存在する場合、最小のものを返す。そのような要素が存在しない場合、 `size()` を返す。
 	 *
 	 * O(log N)
 	 * @param val 検索する要素
-	 * @return int @c val 以上の最小の要素のインデックス (0-indexed)
+	 * @return `val` 以上の最小の要素のインデックス (0-indexed)
 	 */
 	int index(T val) {
 		return _index(_root, val);
@@ -83,72 +83,72 @@ struct avl_tree {
 	 * @brief 要素数を取得する。
 	 *
 	 * O(1)
-	 * @return int 要素数
+	 * @return 要素数
 	 */
 	int size() {
 		return _size(_root);
 	}
 
 	/**
-	 * @brief @c val 以上の最小の要素が何番目に小さいかを取得する。そのような要素が複数存在する場合、最小のものを返す。そのような要素が存在しない場合、 @c size() を返す。
+	 * @brief `val` 以上の最小の要素が何番目に小さいかを取得する。そのような要素が複数存在する場合、最小のものを返す。そのような要素が存在しない場合、 `size()` を返す。
 	 *
 	 * O(log N)
 	 * @param val 検索する要素
-	 * @return int @c val 以上の最小の要素のインデックス (0-indexed)
+	 * @return `val` 以上の最小の要素のインデックス (0-indexed)
 	 */
 	int lower_bound_index(T val) {
 		return _lower_bound_index(_root, val);
 	}
 
 	/**
-	 * @brief @c val 以上の最小の要素を取得する。
+	 * @brief `val` 以上の最小の要素を取得する。
 	 *
 	 * O(log N)
 	 * @param val 検索する要素
-	 * @return T @c val 以上の最小の要素
+	 * @return `val` 以上の最小の要素
 	 */
 	T lower_bound(T val) {
 		return _nth(_root, _lower_bound_index(_root, val))->val;
 	}
 
 	/**
-	 * @brief @c val より大きい最小の要素が何番目に小さいかを取得する。そのような要素が複数存在する場合、最小のものを返す。そのような要素が存在しない場合、 @c size() を返す。
+	 * @brief `val` より大きい最小の要素が何番目に小さいかを取得する。そのような要素が複数存在する場合、最小のものを返す。そのような要素が存在しない場合、 `size()` を返す。
 	 *
 	 * O(log N)
 	 * @param val 検索する要素
-	 * @return int @c val より大きい最小の要素のインデックス (0-indexed)
+	 * @return `val` より大きい最小の要素のインデックス (0-indexed)
 	 */
 	int upper_bound_index(T val) {
 		return _upper_bound_index(_root, val);
 	}
 
 	/**
-	 * @brief @c val より大きい最小の要素を取得する。
+	 * @brief `val` より大きい最小の要素を取得する。
 	 *
 	 * O(log N)
 	 * @param val 検索する要素
-	 * @return T @c val より大きい最小の要素
+	 * @return `val` より大きい最小の要素
 	 */
 	T upper_bound(T val) {
 		return _nth(_root, _upper_bound_index(_root, val))->val;
 	}
 
 	/**
-	 * @brief @c val が何個格納されているかを取得する。
+	 * @brief `val` が何個格納されているかを取得する。
 	 *
 	 * O(log N)
 	 * @param val 検索する要素
-	 * @return int @c val が格納されている個数
+	 * @return `val` が格納されている個数
 	 */
 	int count(T val) {
 		return _count(_root, val);
 	}
 
 	/**
-	 * @brief すべての要素を昇順に格納した @c vector を取得する。 @c avl_tree のすべての要素をイテレートする場合、 [] 演算子よりも高速。
+	 * @brief すべての要素を昇順に格納した `vector` を取得する。 `avl_tree` のすべての要素をイテレートする場合、 `[]` 演算子よりも高速。
 	 *
 	 * O(N)
-	 * @return vector<T> すべての要素を昇順に格納した @c vector
+	 * @return すべての要素を昇順に格納した `vector`
 	 */
 	vector<T> vals() {
 		vector<T> res;
