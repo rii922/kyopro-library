@@ -21,14 +21,14 @@ using namespace std;
  * @return long long @c n の素因数の 1 つ
  */
 long long find_prime_factor(long long n) {
-	using _mint64 = dynamic_mint64<static_cast<int>(0x3bdc9608)>;
+	using mint64 = dynamic_mint64<static_cast<int>(0x3bdc9608)>;
 	if (n % 2 == 0) return 2;
-	_mint64::set_mod(n);
+	mint64::set_mod(n);
 	long long m = round(pow(n, 0.125)) + 1;
 	for (long long c = 1; c < n; c++) {
-		_mint64 y = 0;
-		_mint64 x, yc;
-		_mint64 q = 1;
+		mint64 y = 0;
+		mint64 x, yc;
+		mint64 q = 1;
 		long long r = 1;
 		long long k = 0;
 		long long g = 1;
