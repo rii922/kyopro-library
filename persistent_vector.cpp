@@ -1,36 +1,107 @@
+/**
+ * @file persistent_vector.cpp
+ * @author rii922
+ * @brief 2 分木による完全永続配列
+ * @date 2025-02-17
+ */
+
 #include <bits/stdc++.h>
 using namespace std;
 
+/**
+ * @brief 2 分木による完全永続配列。計算量は `T` のコンストラクタやコピーが定数時間であると仮定したもの。
+ *
+ * @tparam T 配列に格納する値の型
+ */
 template<class T>
 struct persistent_vector {
+	/**
+	 * @brief 永続配列をサイズ `n` で初期化し、バージョン 0 とする。要素はすべて `T` のデフォルトの値である。
+	 *
+	 * O(n)
+	 * @param n サイズ
+	 */
 	persistent_vector(int n) {
 		_init(n);
 		_root.push_back(_generate(_height));
 	}
+
+	/**
+	 * @brief 永続配列を `v` で初期化し、バージョン 0 とする。
+	 *
+	 * O(n)
+	 * @param v 初期化に使う配列
+	 */
 	persistent_vector(vector<T> &v) {
 		_init(v.size());
 		_root.push_back(_generate(_height, v, 0, _n));
 	}
+
+	/**
+	 * @brief 永続配列をサイズ `n` で初期化し、バージョン 0 とする。要素はすべて `x` となる。
+	 *
+	 * O(n)
+	 * @param n サイズ
+	 * @param x 初期値
+	 */
 	persistent_vector(int n, T x) {
 		_init(n);
 		_root.push_back(_generate(_height, x, 0, _n));
 	}
+
+	/**
+	 * @brief 永続配列を `init` で初期化し、バージョン 0 とする。
+	 *
+	 * O(n)
+	 * @param init 初期化に使う配列
+	 */
 	persistent_vector(initializer_list<T> init) {
 		vector<T> v;
 		for (const T x : init) v.push_back(x);
 		_init(v.size());
 		_root.push_back(_generate(_height, v, 0, _n));
 	}
+
+	/**
+	 * @brief 参照するバージョンを変更する。
+	 *
+	 * O(1)
+	 * @param version 新たに参照するバージョン番号
+	 */
 	void set_version(int version) {
 		assert(version < _root.size());
 		_version = version;
 	}
+
+	/**
+	 * @brief 現在参照しているバージョン番号を取得する。
+	 *
+	 * O(1)
+	 * @return 現在参照しているバージョン番号
+	 */
 	int version() {
 		return _version;
 	}
+
+	/**
+	 * @brief 最新のバージョン番号を取得する。
+	 *
+	 * O(1)
+	 * @return 最新のバージョン番号
+	 */
 	int newest_version() {
 		return _root.size() - 1;
 	}
+
+	/**
+	 * @brief 指定したバージョンの配列のインデックス `p` に `x` を格納したものを最新バージョンとし、それを参照するようにする。
+	 *
+	 * O(log n)
+	 * @param p インデックス
+	 * @param x 値
+	 * @param old_version 変更を加える配列のバージョン番号。指定しない場合、現在参照しているバージョンが使われる。
+	 * @return 最新のバージョン番号
+	 */
 	int set(int p, T x, int old_version=-1) {
 		assert(0 <= p && p < _sz);
 		if (old_version == -1) old_version = _version;
@@ -59,6 +130,15 @@ struct persistent_vector {
 		new_t->val = x;
 		return _version = _root.size() - 1;
 	}
+
+	/**
+	 * @brief 指定したバージョンの配列のインデックス `p` の値を取得する。
+	 *
+	 * O(log n)
+	 * @param p インデックス
+	 * @param version 値を取得するバージョン番号。指定しない場合、現在参照しているバージョンが使われる。
+	 * @return 値
+	 */
 	T get(int p, int version=-1) {
 		assert(0 <= p && p < _sz);
 		if (version == -1) version = _version;
@@ -71,6 +151,14 @@ struct persistent_vector {
 		for (int i = _height-2; i >= 0; i--) t = v[i] ? t->right : t->left;
 		return t->val;
 	}
+
+	/**
+	 * @brief 指定したバージョンの配列を取得する。特定のバージョンの配列をイテレートする場合は、 `get` よりも高速。
+	 *
+	 * O(n)
+	 * @param version 取得する配列のバージョン番号。指定しない場合、現在参照しているバージョンが使われる。
+	 * @return 配列
+	 */
 	vector<T> get_all(int version=-1) {
 		if (version == -1) version = _version;
 		vector<T> res;
