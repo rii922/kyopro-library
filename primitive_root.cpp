@@ -2,10 +2,10 @@
  * @file primitive_root.cpp
  * @author rii922
  * @brief `mod` の原始根を求められるよう、 `mint` および `mint64` を拡張する。
- * @date 2025-02-17
+ * @date 2025-02-19
  *
  * Verified with:
- * https://judge.yosupo.jp/submission/268067
+ * https://judge.yosupo.jp/submission/268596
  */
 
 #include <bits/stdc++.h>
@@ -27,11 +27,13 @@ using namespace std;
 // template<class _int, class _uint, class _long, class _ulong, _uint mod> static_montgomery_mint<_int, _uint, _long, _ulong, mod> static_montgomery_mint<_int, _uint, _long, _ulong, mod>::primitive_root() {
 // 	using mint = static_montgomery_mint<_int, _uint, _long, _ulong, mod>;
 // 	mt19937 mt(time(nullptr));
+//	vector<_int> primes;
+//	for (auto &[x, _] : factorize(mod-1)) primes.push_back(x);
 // 	while (true) {
 // 		mint g = mt();
 // 		if (g == 0) continue;
 // 		bool ok = true;
-// 		for (auto &[x, _] : factorize(mod-1)) {
+// 		for (auto &x : primes) {
 // 			if (g.pow((mod-1)/x) == 1) {
 // 				ok = false;
 // 				break;
@@ -54,11 +56,13 @@ using namespace std;
 template<class _int, class _uint, class _long, class _ulong, int id> dynamic_montgomery_mint<_int, _uint, _long, _ulong, id> dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::primitive_root() {
 	using mint = dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>;
 	mt19937 mt(time(nullptr));
+	vector<_int> primes;
+	for (auto &[x, _] : factorize(mod-1)) primes.push_back(x);
 	while (true) {
 		mint g = mt();
 		if (g == 0) continue;
 		bool ok = true;
-		for (auto &[x, _] : factorize(mod-1)) {
+		for (auto &x : primes) {
 			if (g.pow((mod-1)/x) == 1) {
 				ok = false;
 				break;
