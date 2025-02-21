@@ -2,10 +2,11 @@
  * @file montgomery_mint.cpp
  * @author rii922
  * @brief Montgomery 乗算によって自動で剰余を取る整数型。 `mod` が実行前に決まっている場合に使用する。
- * @date 2025-02-17
+ * @date 2025-02-21
  */
 
 #include <bits/stdc++.h>
+#include "is_prime.cpp"
 using namespace std;
 
 /**
@@ -17,58 +18,56 @@ using namespace std;
  * @tparam _ulong `_uint` の倍の精度の符号無し整数型
  * @tparam mod `mod*4` が `_uint` に収まるような奇数
  */
-template<class _int, class _uint, class _long, class _ulong, _uint mod>
+template<signed_integral _int, unsigned_integral _uint, signed_integral _long, unsigned_integral _ulong, _uint mod>
+requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long)) && (mod < _uint(1) << (sizeof(_uint)*8 - 2)) && (mod % 2 == 1)
 struct static_montgomery_mint {
 	using mint = static_montgomery_mint<_int, _uint, _long, _ulong, mod>;
-	static _uint get_mod() {
+	constexpr static _uint get_mod() {
 		return mod;
 	}
-	static mint primitive_root();
-	static_montgomery_mint() : _xr(0) {}
-	static_montgomery_mint(_int x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	static_montgomery_mint(_uint x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	static_montgomery_mint(_long x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	static_montgomery_mint(_ulong x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
-	template<class T> static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	_uint val() const {
+	constexpr static mint primitive_root();
+	constexpr static_montgomery_mint() : _xr(0) {}
+	template<signed_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	template<unsigned_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
+	constexpr _uint val() const {
 		_uint x = _reduce(_xr);
 		return x >= mod ? x - mod : x;
 	}
-	mint operator+() const { return mint(*this); }
-	mint operator-() const { return mint(0) - mint(*this); }
-	mint &operator+=(const mint &a) {
+	constexpr mint operator+() const { return mint(*this); }
+	constexpr mint operator-() const { return mint(0) - mint(*this); }
+	constexpr mint &operator+=(const mint &a) {
 		if (_int(_xr += a._xr - mod * 2) < 0) _xr += mod * 2;
 		return *this;
 	}
-	mint &operator-=(const mint &a) {
+	constexpr mint &operator-=(const mint &a) {
 		if (_int(_xr -= a._xr) < 0) _xr += mod * 2;
 		return *this;
 	}
-	mint &operator*=(const mint &a) {
+	constexpr mint &operator*=(const mint &a) {
 		_xr = _reduce(_ulong(_xr) * a._xr);
 		return *this;
 	}
-	mint &operator++() {
+	constexpr mint &operator++() {
 		*this += 1;
 		return *this;
 	}
-	mint operator++(int) {
+	constexpr mint operator++(int) {
 		mint temp = *this;
 		++*this;
 		return temp;
 	}
-	mint &operator--() {
+	constexpr mint &operator--() {
 		*this -= 1;
 		return *this;
 	}
-	mint operator--(int) {
+	constexpr mint operator--(int) {
 		mint temp = *this;
 		--*this;
 		return temp;
 	}
-	mint operator+(const mint &a) const { return mint(*this) += a; }
-	mint operator-(const mint &a) const { return mint(*this) -= a; }
-	mint operator*(const mint &a) const { return mint(*this) *= a; }
+	constexpr mint operator+(const mint &a) const { return mint(*this) += a; }
+	constexpr mint operator-(const mint &a) const { return mint(*this) -= a; }
+	constexpr mint operator*(const mint &a) const { return mint(*this) *= a; }
 	friend mint operator+(const _long a, const mint b) { return mint(a) + b; }
 	friend mint operator-(const _long a, const mint b) { return mint(a) - b; }
 	friend mint operator*(const _long a, const mint b) { return mint(a) * b; }
@@ -79,7 +78,7 @@ struct static_montgomery_mint {
 	 * @param t 指数
 	 * @return 冪乗
 	 */
-	mint pow(_long t) const {
+	constexpr mint pow(_long t) const {
 		if (t < 0) return pow(-t).inv();
 		mint res = 1;
 		mint mul = *this;
@@ -96,7 +95,8 @@ struct static_montgomery_mint {
 	 *
 	 * @return 逆元
 	 */
-	mint inv() const {
+	constexpr mint inv() const {
+		assert(_is_prime_mod);
 		_int x = val();
 		_int y = mod;
 		_int u = 1;
@@ -110,16 +110,16 @@ struct static_montgomery_mint {
 		}
 		return mint(u);
 	}
-	mint &operator/=(const mint &a) {
+	constexpr mint &operator/=(const mint &a) {
 		*this *= a.inv();
 		return *this;
 	}
-	mint operator/(const mint &a) const { return mint(*this) /= a; }
+	constexpr mint operator/(const mint &a) const { return mint(*this) /= a; }
 	friend mint operator/(const _long a, const mint b) { return mint(a) / b; }
-	bool operator==(const mint &a) const {
+	constexpr bool operator==(const mint &a) const {
 		return (_xr >= mod ? _xr - mod : _xr) == (a._xr >= mod ? a._xr - mod : a._xr);
 	}
-	bool operator!=(const mint &a) const {
+	constexpr bool operator!=(const mint &a) const {
 		return (_xr >= mod ? _xr - mod : _xr) != (a._xr >= mod ? a._xr - mod : a._xr);
 	}
 	friend istream &operator>>(istream &is, mint &a) {
@@ -134,19 +134,19 @@ struct static_montgomery_mint {
 		return os;
 	}
 private:
-	static _uint _r2, _ninv, _sz;
+	static constexpr _uint _r2 = -_ulong(mod) % mod;
+	static constexpr _uint _sz = sizeof(_uint) * 8;
+	static constexpr bool _is_prime_mod = is_prime(mod);
+	static constexpr _uint _ninv = []() {
+		_uint res = mod;
+		while (mod * res != 1) res *= _uint(2) - mod * res;
+		return res;
+	}();
 	_uint _xr;
-	_uint _reduce(const _ulong &a) const {
+	constexpr _uint _reduce(const _ulong &a) const {
 		return (a + _ulong(_uint(a) * _uint(-_ninv)) * mod) >> _sz;
 	}
 };
-template<class _int, class _uint, class _long, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _long, _ulong, mod>::_r2 = -_ulong(mod) % mod;
-template<class _int, class _uint, class _long, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _long, _ulong, mod>::_ninv = []() {
-	_uint res = mod;
-	while (mod * res != 1) res *= _uint(2) - mod * res;
-	return res;
-}();
-template<class _int, class _uint, class _long, class _ulong, _uint mod> _uint static_montgomery_mint<_int, _uint, _long, _ulong, mod>::_sz = sizeof(_uint) * 8;
 
 /**
  * @brief Montgomery 乗算によって自動で剰余を取る 32 bit 整数。

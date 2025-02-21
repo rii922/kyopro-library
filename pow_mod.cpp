@@ -11,6 +11,7 @@ using namespace std;
 /**
  * @brief 冪乗の剰余を求める。
  *
+ * O(log y)
  * @tparam _int `mod` の型
  * @tparam _long `_int` の倍の精度の整数型
  * @param x 底

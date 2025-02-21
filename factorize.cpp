@@ -2,16 +2,28 @@
  * @file factorize.cpp
  * @author rii922
  * @brief Pollard's rho 素因数分解法によって素因数分解を行う。
- * @date 2025-02-17
- *
- * Verified with:
- * https://judge.yosupo.jp/submission/268062
+ * @date 2025-02-21
  */
 
 #include <bits/stdc++.h>
-#include "dynamic_montgomery_mint.cpp"
 #include "is_prime.cpp"
 using namespace std;
+
+template<signed_integral T>
+constexpr T _abs(T x) {
+	return x > 0 ? x : -x;
+}
+
+constexpr int _eighth_root(unsigned long long x) {
+	unsigned long long left = 0;
+	unsigned long long right = 1 << 8;
+	while (right - left > 1) {
+		unsigned long long mid = (left+right)/2;
+		if (mid*mid*mid*mid*mid*mid*mid*mid <= x) left = mid;
+		else right = mid;
+	}
+	return left;
+}
 
 /**
  * @brief Floyd の循環検出法および Richard Brent の変形によって `n` の素因数の 1 つを求める。
@@ -20,32 +32,30 @@ using namespace std;
  * @param n 合成数
  * @return `n` の素因数の 1 つ
  */
-long long find_prime_factor(long long n) {
-	using mint64 = dynamic_mint64<static_cast<int>(0x3bdc9608)>;
+constexpr unsigned long long find_prime_factor(unsigned long long n) {
 	if (n % 2 == 0) return 2;
-	mint64::set_mod(n);
-	long long m = round(pow(n, 0.125)) + 1;
-	for (long long c = 1; c < n; c++) {
-		mint64 y = 0;
-		mint64 x, yc;
-		mint64 q = 1;
-		long long r = 1;
-		long long k = 0;
-		long long g = 1;
+	int m = _eighth_root(n) + 1;
+	for (int c = 1; c < n; c++) {
+		__int128_t y = 0;
+		__int128_t x, yc;
+		__uint128_t q = 1;
+		int r = 1;
+		int k = 0;
+		unsigned long long g = 1;
 		while (g == 1) {
 			x = y;
 			while (k < r*3/4) {
-				y = y*y+c;
+				y = (y*y+c)%n;
 				k++;
 			}
 			while (k < r && g == 1) {
 				yc = y;
-				long long l = min(m, r-k);
-				for (long long i = 0; i < l; i++) {
-					y = y*y+c;
-					q *= x-y;
+				int l = min(m, r-k);
+				for (int i = 0; i < l; i++) {
+					y = (y*y+c)%n;
+					q = q*_abs(x-y)%n;
 				}
-				g = gcd(q.val(), n);
+				g = gcd(q, n);
 				k += m;
 			}
 			k = r;
@@ -55,8 +65,8 @@ long long find_prime_factor(long long n) {
 			g = 1;
 			y = yc;
 			while (g == 1) {
-				y = y*y+c;
-				g = gcd((x-y).val(), n);
+				y = (y*y+c)%n;
+				g = gcd(_abs(x-y), n);
 			}
 		}
 		if (g == n) continue;
