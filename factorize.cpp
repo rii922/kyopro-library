@@ -6,14 +6,20 @@
  */
 
 #include <bits/stdc++.h>
+#include "custom_concepts.cpp"
 #include "is_prime.cpp"
 using namespace std;
 
 /// EXPAND FROM HERE
 
-template<signed_integral T>
+template<gnu_signed_integral T>
 constexpr T _abs(T x) {
 	return x > 0 ? x : -x;
+}
+
+template<gnu_integral T>
+constexpr T _gcd(T a, T b) {
+	return b == 0 ? a : _gcd(b, a%b);
 }
 
 constexpr int _eighth_root(unsigned long long x) {
@@ -57,7 +63,7 @@ constexpr unsigned long long find_prime_factor(unsigned long long n) {
 					y = (y*y+c)%n;
 					q = q*_abs(x-y)%n;
 				}
-				g = gcd(q, n);
+				g = _gcd<__uint128_t>(q, n);
 				k += m;
 			}
 			k = r;
@@ -68,7 +74,7 @@ constexpr unsigned long long find_prime_factor(unsigned long long n) {
 			y = yc;
 			while (g == 1) {
 				y = (y*y+c)%n;
-				g = gcd(_abs(x-y), n);
+				g = _gcd<__uint128_t>(_abs(x-y), n);
 			}
 		}
 		if (g == n) continue;

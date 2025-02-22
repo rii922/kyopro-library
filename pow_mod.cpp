@@ -2,10 +2,11 @@
  * @file pow_mod.cpp
  * @author rii922
  * @brief 冪乗の剰余を求める。
- * @date 2025-02-21
+ * @date 2025-02-22
  */
 
 #include <bits/stdc++.h>
+#include "custom_concepts.cpp"
 using namespace std;
 
 /// EXPAND FROM HERE
@@ -21,7 +22,7 @@ using namespace std;
  * @param mod 法
  * @return 冪乗の剰余
  */
-template<integral _int, integral _long>
+template<gnu_integral _int, gnu_integral _long>
 constexpr _int pow_mod(_long x, _long y, _int mod) {
 	if (y == 0) return 1;
 	_long res = pow_mod<_int, _long>(x, y/2, mod);

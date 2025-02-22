@@ -6,6 +6,7 @@
  */
 
 #include <bits/stdc++.h>
+#include "custom_concepts.cpp"
 #include "is_prime.cpp"
 using namespace std;
 
@@ -20,7 +21,7 @@ using namespace std;
  * @tparam _ulong `_uint` の倍の精度の符号無し整数型
  * @tparam mod `mod*4` が `_uint` に収まるような奇数
  */
-template<signed_integral _int, unsigned_integral _uint, signed_integral _long, unsigned_integral _ulong, _uint mod>
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, _uint mod>
 requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long)) && (mod < _uint(1) << (sizeof(_uint)*8 - 2)) && (mod % 2 == 1)
 struct static_montgomery_mint {
 	using mint = static_montgomery_mint<_int, _uint, _long, _ulong, mod>;
@@ -29,8 +30,8 @@ struct static_montgomery_mint {
 	}
 	constexpr static mint primitive_root();
 	constexpr static_montgomery_mint() : _xr(0) {}
-	template<signed_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	template<unsigned_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
+	template<gnu_signed_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	template<gnu_unsigned_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
 	constexpr _uint val() const {
 		_uint x = _reduce(_xr);
 		return x >= mod ? x - mod : x;
@@ -166,5 +167,5 @@ template<uint64_t mod> using static_mint64 = static_montgomery_mint<int64_t, uin
 
 // using mint = static_mint<1000000007>;
 // using mint64 = static_mint64<1000000007>;
-using mint = static_mint<998244353>;
-using mint64 = static_mint64<998244353>;
+// using mint = static_mint<998244353>;
+// using mint64 = static_mint64<998244353>;

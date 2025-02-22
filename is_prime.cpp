@@ -3,6 +3,9 @@
  * @author rii922
  * @brief Miller-Rabin 素数判定法による素数判定を行う。
  * @date 2025-02-21
+ *
+ * Verified with:
+ * https://judge.yosupo.jp/submission/269057
  */
 
 #include <bits/stdc++.h>

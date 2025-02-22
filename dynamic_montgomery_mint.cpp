@@ -6,6 +6,7 @@
  */
 
 #include <bits/stdc++.h>
+#include "custom_concepts.cpp"
 using namespace std;
 
 /// EXPAND FROM HERE
@@ -19,7 +20,8 @@ using namespace std;
  * @tparam _ulong `_uint` の倍の精度の符号無し整数型
  * @tparam id 型を区別するための ID 。同じ ID を持つインスタンスは同じ `mod` を持つ。
  */
-template<class _int, class _uint, class _long, class _ulong, int id>
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, int id>
+requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long))
 struct dynamic_montgomery_mint {
 	using mint = dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>;
 	static _uint mod;
@@ -42,11 +44,8 @@ struct dynamic_montgomery_mint {
 	}
 	static mint primitive_root();
 	dynamic_montgomery_mint() : _xr(0) {}
-	dynamic_montgomery_mint(_int x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	dynamic_montgomery_mint(_uint x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	dynamic_montgomery_mint(_long x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
-	dynamic_montgomery_mint(_ulong x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
-	template<class T> dynamic_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	template<gnu_signed_integral T> dynamic_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
+	template<gnu_unsigned_integral T> dynamic_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
 	_uint val() const {
 		_uint x = _reduce(_xr);
 		return x >= mod ? x - mod : x;
@@ -157,10 +156,18 @@ private:
 		return (a + _ulong(_uint(a) * _uint(-_ninv)) * mod) >> _sz;
 	}
 };
-template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::mod = 0;
-template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_r2 = 0;
-template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_ninv = 0;
-template<class _int, class _uint, class _long, class _ulong, int id> _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_sz = sizeof(_uint) * 8;
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, int id>
+requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long))
+_uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::mod = 0;
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, int id>
+requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long))
+_uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_r2 = 0;
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, int id>
+requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long))
+_uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_ninv = 0;
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, int id>
+requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long))
+_uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_sz = sizeof(_uint) * 8;
 
 /**
  * @brief Montgomery 乗算によって自動で剰余を取る 32 bit 整数。
@@ -176,5 +183,5 @@ template<int id> using dynamic_mint = dynamic_montgomery_mint<int32_t, uint32_t,
  */
 template<int id> using dynamic_mint64 = dynamic_montgomery_mint<int64_t, uint64_t, __int128_t, __uint128_t, id>;
 
-using mint = dynamic_mint<-1>;
-using mint64 = dynamic_mint64<-1>;
+// using mint = dynamic_mint<-1>;
+// using mint64 = dynamic_mint64<-1>;
