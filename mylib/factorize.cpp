@@ -2,7 +2,10 @@
  * @file factorize.cpp
  * @author rii922
  * @brief Pollard's rho 素因数分解法によって素因数分解を行う。
- * @date 2025-02-21
+ * @date 2025-02-22
+ *
+ * Verified with:
+ * https://judge.yosupo.jp/submission/269065
  */
 
 #include <bits/stdc++.h>
