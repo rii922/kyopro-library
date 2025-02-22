@@ -150,7 +150,8 @@ struct dynamic_montgomery_mint {
 		return os;
 	}
 private:
-	static _uint _r2, _ninv, _sz;
+	static _uint _r2, _ninv;
+	constexpr static _uint _sz = sizeof(_uint) * 8;
 	_uint _xr;
 	_uint _reduce(const _ulong &a) const {
 		return (a + _ulong(_uint(a) * _uint(-_ninv)) * mod) >> _sz;
@@ -165,9 +166,6 @@ _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_r2 = 0;
 template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, int id>
 requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long))
 _uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_ninv = 0;
-template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, gnu_unsigned_integral _ulong, int id>
-requires (sizeof(_int) == sizeof(_uint)) && (sizeof(_long) == sizeof(_ulong)) && (sizeof(_int)*2 == sizeof(_long))
-_uint dynamic_montgomery_mint<_int, _uint, _long, _ulong, id>::_sz = sizeof(_uint) * 8;
 
 /**
  * @brief Montgomery 乗算によって自動で剰余を取る 32 bit 整数。
