@@ -8,6 +8,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 /**
  * @brief 冪乗の剰余を求める。
  *

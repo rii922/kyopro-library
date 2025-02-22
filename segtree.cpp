@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<class S, S (*op)(S, S), S (*e)()>
 struct segtree {
 	segtree(int n) {

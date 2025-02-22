@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 struct fraction {
 	long long p, q;
 	fraction(long long p = 0, long long q = 1) : p(p), q(q) {}

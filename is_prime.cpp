@@ -9,6 +9,8 @@
 #include "pow_mod.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 /**
  * @brief Miller-Rabin 素数判定法による素数判定を行う。
  *

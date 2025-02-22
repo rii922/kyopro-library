@@ -2,6 +2,8 @@
 #include "montgomery_mint.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<class T=int, int base_size=2>
 struct rolling_hash {
 	rolling_hash(int n) {

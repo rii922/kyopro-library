@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<int base, int char_size>
 struct trie {
 	trie() : _root(nullptr) {}

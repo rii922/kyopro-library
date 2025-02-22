@@ -2,6 +2,8 @@
 #include "montgomery_mint.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 struct perm_comb {
 	vector<mint> fact, ifact;
 	perm_comb(int n) : fact(n+1), ifact(n+1) {

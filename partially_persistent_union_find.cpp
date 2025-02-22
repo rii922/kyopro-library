@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 struct partially_persistent_union_find {
 	partially_persistent_union_find(int n) : _parent(n, -1), _rank(n, 0), _time(n, INF), _size(n, {{0, 1}}) {}
 	int version() {

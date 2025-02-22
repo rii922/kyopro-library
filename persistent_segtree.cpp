@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<class S, S (*op)(S, S), S (*e)()>
 struct persistent_segtree {
 	persistent_segtree(int n) {

@@ -2,6 +2,8 @@
 #include "montgomery_mint.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<class _int, class _uint, class _long, template<_uint mod> class static_mint, _uint mod>
 struct ntt_friendly_convolution_base {
 	using mint = static_mint<mod>;

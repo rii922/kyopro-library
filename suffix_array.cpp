@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 vector<int> suffix_array(vector<int> &v) {
 	int n = v.size();
 	vector<int> res(n);

@@ -3,6 +3,8 @@
 #include "convolution.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<class convolution, int mod>
 struct fps_base {
 	using fps = fps_base<convolution, mod>;

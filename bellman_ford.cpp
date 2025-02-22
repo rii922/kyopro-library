@@ -1,18 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
+template<class T>
 struct bellman_ford {
-	bellman_ford(long long n) : _n(n) {}
-	void add_edge(long long from, long long to, long long cost) {
-		edges.push_back(edge(from, to, cost));
+	static const T INF;
+	bellman_ford(int n) : _n(n) {}
+	void add_edge(int from, int to, T cost) {
+		_edges.push_back(edge(from, to, cost));
 	}
-	vector<long long> calc(long long s) {
-		vector<long long> d(edges.size(), INF);
+	vector<T> calc(int s) {
+		vector<T> d(_edges.size(), INF);
 		d[s] = 0;
-		long long cnt = 0;
+		int cnt = 0;
 		while (cnt < _n) {
 			bool flag = true;
-			for (auto &e : edges) {
+			for (auto &e : _edges) {
 				if (d[e.from] != INF && d[e.to] < d[e.from]+e.cost) {
 					d[e.to] = d[e.from]+e.cost;
 					flag = false;
@@ -29,11 +33,13 @@ struct bellman_ford {
 	}
 private:
 	struct edge {
-		long long from, to, cost;
-		edge(long long from, long long to, long long cost) : from(from), to(to), cost(cost) {}
+		int from, to;
+		T cost;
+		edge(int from, int to, T cost) : from(from), to(to), cost(cost) {}
 	};
-	long long INF = 1LL << 60;
-	vector<edge> edges;
-	long long _n;
+	vector<edge> _edges;
+	int _n;
 	bool _has_negative_cycle;
 };
+template<> const int bellman_ford<int>::INF = 1001001001;
+template<> const long long bellman_ford<long long>::INF = 1LL << 60;

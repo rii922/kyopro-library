@@ -2,7 +2,7 @@
  * @file union_find.cpp
  * @author rii922
  * @brief 素集合データ構造
- * @date 2025-02-17
+ * @date 2025-02-22
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/268143
@@ -10,6 +10,8 @@
 
 #include <bits/stdc++.h>
 using namespace std;
+
+/// EXPAND FROM HERE
 
 /**
  * @brief 素集合データ構造

@@ -2,7 +2,7 @@
  * @file persistent_union_find.cpp
  * @author rii922
  * @brief 完全永続配列を利用した、完全永続素集合データ構造
- * @date 2025-02-17
+ * @date 2025-02-22
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/268213
@@ -11,6 +11,8 @@
 #include <bits/stdc++.h>
 #include "persistent_vector.cpp"
 using namespace std;
+
+/// EXPAND FROM HERE
 
 /**
  * @brief 完全永続配列を利用した、完全永続素集合データ構造

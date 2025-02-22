@@ -2,11 +2,13 @@
  * @file persistent_vector.cpp
  * @author rii922
  * @brief 2 分木による完全永続配列
- * @date 2025-02-17
+ * @date 2025-02-22
  */
 
 #include <bits/stdc++.h>
 using namespace std;
+
+/// EXPAND FROM HERE
 
 /**
  * @brief 2 分木による完全永続配列。計算量は `T` のコンストラクタやコピーが定数時間であると仮定したもの。

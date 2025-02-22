@@ -9,6 +9,8 @@
 #include "is_prime.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<signed_integral T>
 constexpr T _abs(T x) {
 	return x > 0 ? x : -x;

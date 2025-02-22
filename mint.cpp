@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<int mod>
 struct static_mint {
 	using mint = static_mint<mod>;

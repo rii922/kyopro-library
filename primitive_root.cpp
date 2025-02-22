@@ -11,6 +11,8 @@
 #include "factorize.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 /**
  * @brief `mod` の最小の原始根を求める。
  *

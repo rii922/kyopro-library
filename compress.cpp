@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<class T>
 vector<T> compress(vector<T> &X) {
 	vector<T> vals = X;

@@ -9,6 +9,8 @@
 #include "is_prime.cpp"
 using namespace std;
 
+/// EXPAND FROM HERE
+
 /**
  * @brief Montgomery 乗算によって自動で剰余を取る汎用クラス。 `mod` が実行前に決まっている場合に使用する。
  *

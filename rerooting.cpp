@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/// EXPAND FROM HERE
+
 template<class S, S (*op)(S, S), S (*e)(), S (*put_vertex)(S, int), S (*put_edge)(S, int)>
 struct rerooting {
 	rerooting(int n) : _graph(n), _lprod(n), _rprod(n) {}
