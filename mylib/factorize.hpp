@@ -1,16 +1,16 @@
 /**
- * @file factorize.cpp
+ * @file factorize.hpp
  * @author rii922
  * @brief Pollard's rho 素因数分解法によって素因数分解を行う。
- * @date 2025-02-22
+ * @date 2025-02-24
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/269065
  */
 
 #include <bits/stdc++.h>
-#include "custom_concepts.cpp"
-#include "is_prime.cpp"
+#include "custom_concepts.hpp"
+#include "is_prime.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

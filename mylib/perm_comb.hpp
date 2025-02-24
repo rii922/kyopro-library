@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "montgomery_mint.cpp"
+#include "montgomery_mint.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

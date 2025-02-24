@@ -1,12 +1,12 @@
 /**
- * @file pow_mod.cpp
+ * @file pow_mod.hpp
  * @author rii922
  * @brief 冪乗の剰余を求める。
- * @date 2025-02-22
+ * @date 2025-02-24
  */
 
 #include <bits/stdc++.h>
-#include "custom_concepts.cpp"
+#include "custom_concepts.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

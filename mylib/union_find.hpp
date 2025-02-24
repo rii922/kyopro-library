@@ -1,8 +1,8 @@
 /**
- * @file union_find.cpp
+ * @file union_find.hpp
  * @author rii922
  * @brief 素集合データ構造
- * @date 2025-02-22
+ * @date 2025-02-24
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/268143

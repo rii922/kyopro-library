@@ -1,15 +1,15 @@
 /**
- * @file is_prime.cpp
+ * @file is_prime.hpp
  * @author rii922
  * @brief Miller-Rabin 素数判定法による素数判定を行う。
- * @date 2025-02-21
+ * @date 2025-02-24
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/269057
  */
 
 #include <bits/stdc++.h>
-#include "pow_mod.cpp"
+#include "pow_mod.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

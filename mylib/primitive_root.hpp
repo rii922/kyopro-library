@@ -1,17 +1,17 @@
 /**
- * @file primitive_root.cpp
+ * @file primitive_root.hpp
  * @author rii922
  * @brief `mod` の原始根を求められるよう、 `mint` および `mint64` を拡張する。
- * @date 2025-02-22
+ * @date 2025-02-24
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/269060
  */
 
 #include <bits/stdc++.h>
-#include "montgomery_mint.cpp"
-#include "dynamic_montgomery_mint.cpp"
-#include "factorize.cpp"
+#include "montgomery_mint.hpp"
+#include "dynamic_montgomery_mint.hpp"
+#include "factorize.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

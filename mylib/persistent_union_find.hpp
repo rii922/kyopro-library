@@ -1,15 +1,15 @@
 /**
- * @file persistent_union_find.cpp
+ * @file persistent_union_find.hpp
  * @author rii922
  * @brief 完全永続配列を利用した、完全永続素集合データ構造
- * @date 2025-02-22
+ * @date 2025-02-24
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/268213
  */
 
 #include <bits/stdc++.h>
-#include "persistent_vector.cpp"
+#include "persistent_vector.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

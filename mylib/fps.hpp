@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include "montgomery_mint.cpp"
-#include "convolution.cpp"
+#include "montgomery_mint.hpp"
+#include "convolution.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

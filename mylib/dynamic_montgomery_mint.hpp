@@ -2,11 +2,11 @@
  * @file dynamic_montgomery_mint.cpp
  * @author rii922
  * @brief Montgomery 乗算によって自動で剰余を取る整数型。 `mod` が実行時に決まる場合に使用する。
- * @date 2025-02-22
+ * @date 2025-02-24
  */
 
 #include <bits/stdc++.h>
-#include "custom_concepts.cpp"
+#include "custom_concepts.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

@@ -1,8 +1,8 @@
 /**
- * @file persistent_vector.cpp
+ * @file persistent_vector.hpp
  * @author rii922
  * @brief 2 分木による完全永続配列
- * @date 2025-02-22
+ * @date 2025-02-24
  */
 
 #include <bits/stdc++.h>

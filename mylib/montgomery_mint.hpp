@@ -1,13 +1,13 @@
 /**
- * @file montgomery_mint.cpp
+ * @file montgomery_mint.hpp
  * @author rii922
  * @brief Montgomery 乗算によって自動で剰余を取る整数型。 `mod` が実行前に決まっている場合に使用する。
- * @date 2025-02-21
+ * @date 2025-02-24
  */
 
 #include <bits/stdc++.h>
-#include "custom_concepts.cpp"
-#include "is_prime.cpp"
+#include "custom_concepts.hpp"
+#include "is_prime.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE
