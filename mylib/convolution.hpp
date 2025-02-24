@@ -1,7 +1,19 @@
+/**
+ * @file convolution.hpp
+ * @author rii922
+ * @brief 様々な mod に関する畳み込み
+ * @date 2025-02-24
+ *
+ * Verified with:
+ * https://judge.yosupo.jp/submission/269470
+ * https://judge.yosupo.jp/submission/269476
+ * https://judge.yosupo.jp/submission/269483
+ */
+
 #include <bits/stdc++.h>
-#include "custom_concepts.cpp"
-#include "montgomery_mint.cpp"
-#include "primitive_root.cpp"
+#include "custom_concepts.hpp"
+#include "montgomery_mint.hpp"
+#include "primitive_root.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE
@@ -14,15 +26,15 @@ using namespace std;
  * @tparam _long `_int` の倍の精度の符号付き整数型
  * @tparam mint 自動で剰余を取る整数型
  */
-template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, class mint>
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, template<_uint mod> class static_mint, _uint mod>
 requires requires {
 	requires sizeof(_int) == sizeof(_uint);
 	requires sizeof(_int)*2 == sizeof(_long);
-	requires sizeof(decltype(mint::_xr)) == sizeof(_int);
-	{mint::get_mod()} -> same_as<_uint>;
-	{mint::primitive_root()} -> same_as<mint>;
+	{static_mint<mod>::get_mod()} -> same_as<_uint>;
+	{static_mint<mod>::primitive_root()} -> same_as<static_mint<mod>>;
 }
 struct ntt_friendly_convolution_base {
+	using mint = static_mint<mod>;
 	constexpr ntt_friendly_convolution_base() {}
 
 	/**
@@ -60,7 +72,7 @@ struct ntt_friendly_convolution_base {
 	 * @param a, b `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` である必要がある
 	 * @return `a` と `b` の畳み込みである、長さ `a.size()+b.size()-1` の `vector`
 	 */
-	template<class T>
+	template<gnu_integral T>
 	vector<T> operator()(const vector<T> &a, const vector<T> &b) const {
 		int n = a.size() + b.size() - 1;
 		int n2 = 1;
@@ -82,7 +94,6 @@ struct ntt_friendly_convolution_base {
 		return c;
 	}
 private:
-	constexpr static _uint mod = mint::get_mod();
 	constexpr static mint _pr = mint::primitive_root();
 	void _ntt(vector<mint> &v, vector<mint> &root) const {
 		if (v.size() <= 1) return;
@@ -184,14 +195,14 @@ private:
  *
  * @tparam mod `mod*4` が `uint32_t` に収まるような NTT-friendly 奇素数
  */
-template<uint32_t mod> using ntt_friendly_convolution = ntt_friendly_convolution_base<int32_t, uint32_t, int64_t, static_mint<mod>>;
+template<uint32_t mod> using ntt_friendly_convolution = ntt_friendly_convolution_base<int32_t, uint32_t, int64_t, static_mint, mod>;
 
 /**
  * @brief NTT-friendly 64 bit 素数 mod に関する畳み込みを提供するクラス。
  *
  * @tparam mod `mod*4` が `uint64_t` に収まるような NTT-friendly 奇素数
  */
-template<uint64_t mod> using ntt_friendly_convolution64 = ntt_friendly_convolution_base<int64_t, uint64_t, __int128_t, static_mint64<mod>>;
+template<uint64_t mod> using ntt_friendly_convolution64 = ntt_friendly_convolution_base<int64_t, uint64_t, __int128_t, static_mint64, mod>;
 
 /**
  * @brief NTT-friendly とは限らない mod に関する畳み込みを提供する汎用クラス。
@@ -201,15 +212,15 @@ template<uint64_t mod> using ntt_friendly_convolution64 = ntt_friendly_convoluti
  * @tparam _long `_int` の倍の精度の符号付き整数型
  * @tparam mint 自動で剰余を取る整数型
  */
-template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, template<_uint mod> class ntt_friendly_convolution, class mint, _uint mod0, _uint mod1, _uint mod2>
+template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, template<_uint mod> class ntt_friendly_convolution, template<_uint mod> class static_mint, _uint mod0, _uint mod1, _uint mod2, _uint mod>
 requires requires {
 	requires sizeof(_int) == sizeof(_uint);
 	requires sizeof(_int)*2 == sizeof(_long);
-	requires sizeof(decltype(mint::_xr)) == sizeof(_int);
-	{mint::get_mod()} -> same_as<_uint>;
-	{mint::primitive_root()} -> same_as<mint>;
+	{static_mint<mod>::get_mod()} -> same_as<_uint>;
+	{static_mint<mod>::primitive_root()} -> same_as<static_mint<mod>>;
 }
 struct arbitrary_convolution_base {
+	using mint = static_mint<mod>;
 	constexpr arbitrary_convolution_base() {}
 
 	/**
@@ -244,7 +255,7 @@ struct arbitrary_convolution_base {
 	 * @param a, b `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` である必要がある
 	 * @return `a` と `b` の畳み込みである、長さ `a.size()+b.size()-1` の `vector`
 	 */
-	template<class T>
+	template<gnu_integral T>
 	vector<T> operator()(const vector<T> &a, const vector<T> &b) const {
 		vector<T> c0 = _conv0(a, b);
 		vector<T> c1 = _conv1(a, b);
@@ -260,7 +271,6 @@ struct arbitrary_convolution_base {
 		return c;
 	}
 private:
-	constexpr static _uint mod = mint::get_mod();
 	constexpr static ntt_friendly_convolution<mod0> _conv0 {};
 	constexpr static ntt_friendly_convolution<mod1> _conv1 {};
 	constexpr static ntt_friendly_convolution<mod2> _conv2 {};
@@ -275,14 +285,14 @@ private:
  *
  * @tparam mod `mod*4` が `uint32_t` に収まるような奇数
  */
-template<int32_t mod> using arbitrary_convolution = arbitrary_convolution_base<int32_t, uint32_t, int64_t, ntt_friendly_convolution, static_mint<mod>, 167772161, 469762049, 754974721>;
+template<int32_t mod> using arbitrary_convolution = arbitrary_convolution_base<int32_t, uint32_t, int64_t, ntt_friendly_convolution, static_mint, 167772161, 469762049, 754974721, mod>;
 
 /**
  * @brief 64 bit mod に関する畳み込みを提供するクラス。
  *
  * @tparam mod `mod*4` が `uint64_t` に収まるような奇数
  */
-template<int64_t mod> using arbitrary_convolution64 = arbitrary_convolution_base<int64_t, uint64_t, __int128_t, ntt_friendly_convolution64, static_mint64<mod>, 4604226931544555521ULL, 4605071356474687489ULL, 4610208274799656961ULL>;
+template<int64_t mod> using arbitrary_convolution64 = arbitrary_convolution_base<int64_t, uint64_t, __int128_t, ntt_friendly_convolution64, static_mint64, 4604226931544555521ULL, 4605071356474687489ULL, 4610208274799656961ULL, mod>;
 
 /**
  * @brief `2^64` を mod とした畳み込みを提供するクラス。
@@ -298,16 +308,18 @@ struct convolution_ull {
 	 * @param a, b `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` である必要がある
 	 * @return `a` と `b` の畳み込みである、長さ `a.size()+b.size()-1` の `vector`
 	 */
-	vector<uint64_t> operator()(const vector<uint64_t> &a, const vector<uint64_t> &b) const {
-		vector<uint64_t> c0 = _conv0(a, b);
-		vector<uint64_t> c1 = _conv1(a, b);
-		vector<uint64_t> c2 = _conv2(a, b);
-		vector<uint64_t> c(c0.size());
-		constexpr uint64_t w = mod0 * mod1;
+	template<class T>
+	requires same_as<T, uint64_t> || same_as<T, unsigned long long>
+	vector<T> operator()(const vector<T> &a, const vector<T> &b) const {
+		vector<T> c0 = _conv0(a, b);
+		vector<T> c1 = _conv1(a, b);
+		vector<T> c2 = _conv2(a, b);
+		vector<T> c(c0.size());
+		constexpr T w = mod0 * mod1;
 		for (int i = 0; i < c.size(); i++) {
-			uint64_t t0 = c0[i];
-			uint64_t t1 = (__uint128_t)(c1[i] - t0 + mod1) * _r01 % mod1;
-			uint64_t t2 = ((__uint128_t)(c2[i] - t0 + mod2) * _r02r12 + (__uint128_t)(-t1 + mod2) * _r12) % mod2;
+			T t0 = c0[i];
+			T t1 = (__uint128_t)(c1[i] - t0 + mod1) * _r01 % mod1;
+			T t2 = ((__uint128_t)(c2[i] - t0 + mod2) * _r02r12 + (__uint128_t)(-t1 + mod2) * _r12) % mod2;
 			c[i] = (__uint128_t)t0 + (__uint128_t)t1 * mod0 + (__uint128_t)t2 * w;
 		}
 		return c;
