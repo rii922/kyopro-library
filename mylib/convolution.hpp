@@ -386,14 +386,14 @@ private:
  *
  * @tparam mod `mod*4` が `uint32_t` に収まるような奇数
  */
-template<int32_t mod> using arbitrary_convolution = arbitrary_convolution_base<int32_t, uint32_t, int64_t, ntt_friendly_convolution, static_mint, 167772161, 469762049, 754974721, mod>;
+template<uint32_t mod> using arbitrary_convolution = arbitrary_convolution_base<int32_t, uint32_t, int64_t, ntt_friendly_convolution, static_mint, 167772161, 469762049, 754974721, mod>;
 
 /**
  * @brief 64 bit mod に関する畳み込みを提供するクラス。
  *
  * @tparam mod `mod*4` が `uint64_t` に収まるような奇数
  */
-template<int64_t mod> using arbitrary_convolution64 = arbitrary_convolution_base<int64_t, uint64_t, __int128_t, ntt_friendly_convolution64, static_mint64, 4604226931544555521ULL, 4605071356474687489ULL, 4610208274799656961ULL, mod>;
+template<uint64_t mod> using arbitrary_convolution64 = arbitrary_convolution_base<int64_t, uint64_t, __int128_t, ntt_friendly_convolution64, static_mint64, 4604226931544555521ULL, 4605071356474687489ULL, 4610208274799656961ULL, mod>;
 
 /**
  * @brief `2^64` を mod とした畳み込みを提供するクラス。
