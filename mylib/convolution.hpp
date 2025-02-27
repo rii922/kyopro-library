@@ -25,7 +25,8 @@ using namespace std;
  * @tparam _int `_uint` と同じ精度の符号付き整数型
  * @tparam _uint `mod*4` を表現可能な符号無し整数型
  * @tparam _long `_int` の倍の精度の符号付き整数型
- * @tparam mint 自動で剰余を取る整数型
+ * @tparam static_mint 自動で剰余を取る整数型
+ * @tparam mod 法
  */
 template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, template<_uint mod> class static_mint, _uint mod>
 requires requires {
@@ -305,7 +306,12 @@ template<uint64_t mod> using ntt_friendly_convolution64 = ntt_friendly_convoluti
  * @tparam _int `_uint` と同じ精度の符号付き整数型
  * @tparam _uint `mod*4` を表現可能な符号無し整数型
  * @tparam _long `_int` の倍の精度の符号付き整数型
- * @tparam mint 自動で剰余を取る整数型
+ * @tparam ntt_friendly_convolution NTT-friendly 素数 mod に関する畳み込みを提供するクラス。
+ * @tparam static_mint 自動で剰余を取る整数型
+ * @tparam mod0 NTT-friendly 素数
+ * @tparam mod1 NTT-friendly 素数
+ * @tparam mod2 NTT-friendly 素数
+ * @tparam mod 法
  */
 template<gnu_signed_integral _int, gnu_unsigned_integral _uint, gnu_signed_integral _long, template<_uint mod> class ntt_friendly_convolution, template<_uint mod> class static_mint, _uint mod0, _uint mod1, _uint mod2, _uint mod>
 requires requires {
