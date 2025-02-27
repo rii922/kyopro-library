@@ -2,7 +2,7 @@
  * @file convolution.hpp
  * @author rii922
  * @brief 様々な mod に関する畳み込み
- * @date 2025-02-24
+ * @date 2025-02-27
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/269470
@@ -96,7 +96,7 @@ struct ntt_friendly_convolution_base {
 	}
 
 	/**
-	 * @brief 高速 FFT および NTT によって NTT-friendly 素数 mod に関する畳み込みを行う。 `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` が満たされないときに使う。
+	 * @brief 高速 FFT および NTT によって NTT-friendly 素数 mod に関する畳み込みを行う。 `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` が満たされない場合に使う。
 	 *
 	 * @param a, b `vector`
 	 * @return `a` と `b` の畳み込みである、長さ `a.size()+b.size()-1` の `vector`
@@ -142,7 +142,7 @@ struct ntt_friendly_convolution_base {
 	}
 
 	/**
-	 * @brief 高速 FFT および NTT によって NTT-friendly 素数 mod に関する畳み込みを行う。 `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` が満たされないときに使う。
+	 * @brief 高速 FFT および NTT によって NTT-friendly 素数 mod に関する畳み込みを行う。 `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` が満たされない場合に使う。
 	 *
 	 * @param a, b `vector`
 	 * @return `a` と `b` の畳み込みである、長さ `a.size()+b.size()-1` の `vector`
