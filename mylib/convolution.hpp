@@ -8,6 +8,7 @@
  * https://judge.yosupo.jp/submission/269470
  * https://judge.yosupo.jp/submission/269476
  * https://judge.yosupo.jp/submission/269483
+ * https://judge.yosupo.jp/submission/270107
  */
 
 #include <bits/stdc++.h>
@@ -91,6 +92,100 @@ struct ntt_friendly_convolution_base {
 		mint ni = mint(n2).inv();
 		vector<T> c(n);
 		for (int i = 0; i < n; i++) c[i] = (a2[i] * ni).val();
+		return c;
+	}
+
+	/**
+	 * @brief 高速 FFT および NTT によって NTT-friendly 素数 mod に関する畳み込みを行う。 `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` が満たされないときに使う。
+	 *
+	 * @param a, b `vector`
+	 * @return `a` と `b` の畳み込みである、長さ `a.size()+b.size()-1` の `vector`
+	 */
+	vector<mint> large(const vector<mint> &a, const vector<mint> &b) const {
+		int n = a.size() + b.size() - 1;
+		int n2 = 1 << __builtin_ctz(mod-1);
+		vector<mint> root(n2+1);
+		root[0] = 1;
+		mint g = _pr.pow((mod-1)/n2);
+		for (int i = 0; i < n2; i++) root[i+1] = root[i] * g;
+		vector<vector<mint>> as, bs;
+		for (int i = 0; i < a.size(); i += n2/2) {
+			vector<mint> a2(n2, 0);
+			int len = min<int>(a.size()-i, n2/2);
+			for (int j = 0; j < len; j++) a2[j] = a[i+j];
+			_ntt(a2, root);
+			as.push_back(a2);
+		}
+		for (int i = 0; i < b.size(); i += n2/2) {
+			vector<mint> b2(n2, 0);
+			int len = min<int>(b.size()-i, n2/2);
+			for (int j = 0; j < len; j++) b2[j] = b[i+j];
+			_ntt(b2, root);
+			bs.push_back(b2);
+		}
+		vector<vector<mint>> cs(as.size()+bs.size()-1, vector<mint>(n2, 0));
+		for (int i = 0; i < as.size(); i++) {
+			for (int j = 0; j < bs.size(); j++) {
+				for (int k = 0; k < n2; k++) cs[i+j][k] += as[i][k] * bs[j][k];
+			}
+		}
+		for (int i = 0; i < cs.size(); i++) _intt(cs[i], root);
+		vector<mint> c(n);
+		for (int i = 0; i < cs.size(); i++) {
+			int offset = n2/2*i;
+			int len = min<int>(c.size()-offset, n2);
+			for (int j = 0; j < len; j++) c[j+offset] += cs[i][j];
+		}
+		mint ni = mint(n2).inv();
+		for (int i = 0; i < n; i++) c[i] *= ni;
+		return c;
+	}
+
+	/**
+	 * @brief 高速 FFT および NTT によって NTT-friendly 素数 mod に関する畳み込みを行う。 `mod = d*2^s + 1` のとき、 `a.size()+b.size()-1 <= 2^s` が満たされないときに使う。
+	 *
+	 * @param a, b `vector`
+	 * @return `a` と `b` の畳み込みである、長さ `a.size()+b.size()-1` の `vector`
+	 */
+	template<gnu_integral T>
+	vector<T> large(const vector<T> &a, const vector<T> &b) const {
+		int n = a.size() + b.size() - 1;
+		int n2 = 1 << __builtin_ctz(mod-1);
+		vector<mint> root(n2+1);
+		root[0] = 1;
+		mint g = _pr.pow((mod-1)/n2);
+		for (int i = 0; i < n2; i++) root[i+1] = root[i] * g;
+		vector<vector<mint>> as, bs;
+		for (int i = 0; i < a.size(); i += n2/2) {
+			vector<mint> a2(n2, 0);
+			int len = min<int>(a.size()-i, n2/2);
+			for (int j = 0; j < len; j++) a2[j] = a[i+j];
+			_ntt(a2, root);
+			as.push_back(a2);
+		}
+		for (int i = 0; i < b.size(); i += n2/2) {
+			vector<mint> b2(n2, 0);
+			int len = min<int>(b.size()-i, n2/2);
+			for (int j = 0; j < len; j++) b2[j] = b[i+j];
+			_ntt(b2, root);
+			bs.push_back(b2);
+		}
+		vector<vector<mint>> cs(as.size()+bs.size()-1, vector<mint>(n2, 0));
+		for (int i = 0; i < as.size(); i++) {
+			for (int j = 0; j < bs.size(); j++) {
+				for (int k = 0; k < n2; k++) cs[i+j][k] += as[i][k] * bs[j][k];
+			}
+		}
+		for (int i = 0; i < cs.size(); i++) _intt(cs[i], root);
+		vector<mint> cm(n);
+		for (int i = 0; i < cs.size(); i++) {
+			int offset = n2/2*i;
+			int len = min<int>(cm.size()-offset, n2);
+			for (int j = 0; j < len; j++) cm[j+offset] += cs[i][j];
+		}
+		mint ni = mint(n2).inv();
+		vector<T> c(n);
+		for (int i = 0; i < n; i++) c[i] = (cm[i] * ni).val();
 		return c;
 	}
 private:
