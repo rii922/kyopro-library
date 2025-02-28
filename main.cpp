@@ -50,8 +50,8 @@ template<class T>
 ostream &operator<<(ostream &os, const vector<T> &v) {
 	int sz = v.size();
 	for (int i = 0; i < sz; i++) {
+		if (i) os << ' ';
 		os << v[i];
-		if (i != sz-1) os << ' ';
 	}
 	return os;
 }
