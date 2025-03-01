@@ -1,19 +1,64 @@
+/**
+ * @file dijkstra.hpp
+ * @author rii922
+ * @brief Dijkstra 法によって単一始点最短経路を求める。
+ * @date 2025-03-02
+ *
+ * Verified with:
+ * https://judge.yosupo.jp/submission/270571
+ */
+
 #include <bits/stdc++.h>
 using namespace std;
 
 /// EXPAND FROM HERE
 
+/**
+ * @brief Dijkstra 法によって単一始点最短経路を求めるクラス。
+ *
+ * @tparam T 辺の重みを表す整数型
+ */
 template<class T>
 struct dijkstra {
 	static const T INF;
+
+	/**
+	 * @brief `n` 頂点 0 辺のグラフで初期化する。
+	 *
+	 * @param n 頂点数
+	 */
 	dijkstra(int n) : _g(n) {}
+
+	/**
+	 * @brief `from` から `to` へ重さ `cost` の有向辺を追加する。
+	 *
+	 * @param from 始点
+	 * @param to 終点
+	 * @param cost 重み
+	 */
 	void add_edge(int from, int to, T cost) {
 		_g[from].push_back(edge(to, cost));
 	}
+
+	/**
+	 * @brief `from` から `to` へ重さ `cost` の無向辺を追加する。
+	 *
+	 * @param from 始点
+	 * @param to 終点
+	 * @param cost 重み
+	 */
 	void add_indirected_edge(int from, int to, T cost) {
 		add_edge(from, to, cost);
 		add_edge(to, from, cost);
 	}
+
+	/**
+	 * @brief `s` を始点として各頂点への最短経路長を求める。
+	 *
+	 * O(V+E log E)
+	 * @param s 始点
+	 * @return 各頂点への最短経路長
+	 */
 	vector<T> calc(int s) {
 		vector<T> d(_g.size(), INF);
 		_prev = vector<int>(_g.size(), -1);
@@ -35,6 +80,15 @@ struct dijkstra {
 		}
 		return d;
 	}
+
+	/**
+	 * @brief `s` から `t` への最短経路長を求める。
+	 *
+	 * O(V+E log E)
+	 * @param s 始点
+	 * @param t 終点
+	 * @return `s` から `t` への最短経路長
+	 */
 	T calc(int s, int t) {
 		vector<T> d(_g.size(), INF);
 		_prev = vector<int>(_g.size(), -1);
@@ -57,6 +111,13 @@ struct dijkstra {
 		}
 		return INF;
 	}
+
+	/**
+	 * @brief `t` への最短パスを 1 つ求め、通る頂点を順に並べた `vector` を返す。事前に `calc(s)` を呼び出しておく必要がある。
+	 *
+	 * @param t 終点
+	 * @return `t` への最短パスで通る頂点を順に並べた `vector`
+	 */
 	vector<int> get_path(int t) {
 		vector<int> path;
 		for (int cur = t; cur != -1; cur = _prev[cur]) {
