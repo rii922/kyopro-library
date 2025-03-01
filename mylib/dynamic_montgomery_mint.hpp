@@ -43,6 +43,7 @@ struct dynamic_montgomery_mint {
 		while (mod * _ninv != 1) _ninv *= _uint(2) - mod * _ninv;
 	}
 	static mint primitive_root();
+	static long long discrete_log(mint x, mint y);
 	dynamic_montgomery_mint() : _xr(0) {}
 	template<gnu_signed_integral T> dynamic_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	template<gnu_unsigned_integral T> dynamic_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}

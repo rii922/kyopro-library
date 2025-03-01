@@ -29,6 +29,7 @@ struct static_montgomery_mint {
 		return mod;
 	}
 	constexpr static mint primitive_root();
+	static long long discrete_log(mint x, mint y);
 	constexpr static_montgomery_mint() : _xr(0) {}
 	template<gnu_signed_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_long(mod)+mod)*_r2)) {}
 	template<gnu_unsigned_integral T> constexpr static_montgomery_mint(T x) : _xr(_reduce(_ulong(x%_ulong(mod)+mod)*_r2)) {}
