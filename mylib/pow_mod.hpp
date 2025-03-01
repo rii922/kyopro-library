@@ -24,7 +24,7 @@ using namespace std;
  */
 template<gnu_integral _int, gnu_integral _long>
 constexpr _int pow_mod(_long x, _long y, _int mod) {
-	if (y == 0) return 1;
+	if (y == 0) return 1 % mod;
 	_long res = pow_mod<_int, _long>(x, y/2, mod);
 	res = res*res%mod;
 	if (y % 2 == 1) res = res*x%mod;
