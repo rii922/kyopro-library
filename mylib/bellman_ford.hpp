@@ -38,11 +38,11 @@ struct bellman_ford {
 	}
 
 	/**
-	 * @brief `s` を始点として各頂点への最短経路を求める。負閉路があるかどうかも検出する。
+	 * @brief `s` を始点として各頂点への最短経路長を求める。負閉路があるかどうかも検出する。
 	 *
 	 * O(VE)
 	 * @param s 始点
-	 * @return 各頂点への最短経路。負閉路がある場合は未定義。
+	 * @return 各頂点への最短経路長。負閉路がある場合は未定義。
 	 */
 	vector<T> calc(int s) {
 		vector<T> d(_edges.size(), INF);
