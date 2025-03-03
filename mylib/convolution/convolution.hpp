@@ -12,9 +12,9 @@
  */
 
 #include <bits/stdc++.h>
-#include "custom_concepts.hpp"
-#include "montgomery_mint.hpp"
-#include "primitive_root.hpp"
+#include "../custom_concepts.hpp"
+#include "../mint/montgomery_mint.hpp"
+#include "../number_theory/primitive_root.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

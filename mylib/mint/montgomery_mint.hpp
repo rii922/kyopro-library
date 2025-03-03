@@ -6,8 +6,8 @@
  */
 
 #include <bits/stdc++.h>
-#include "custom_concepts.hpp"
-#include "is_prime.hpp"
+#include "../custom_concepts.hpp"
+#include "../number_theory/is_prime.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

@@ -12,9 +12,9 @@
  */
 
 #include <bits/stdc++.h>
-#include "custom_concepts.hpp"
-#include "montgomery_mint.hpp"
-#include "convolution.hpp"
+#include "../custom_concepts.hpp"
+#include "../mint/montgomery_mint.hpp"
+#include "../convolution/convolution.hpp"
 using namespace std;
 
 /// EXPAND FROM HERE

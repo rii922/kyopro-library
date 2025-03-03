@@ -9,8 +9,8 @@
  */
 
 #include <bits/stdc++.h>
-#include "montgomery_mint.hpp"
-#include "dynamic_montgomery_mint.hpp"
+#include "../mint/montgomery_mint.hpp"
+#include "../mint/dynamic_montgomery_mint.hpp"
 #include "factorize.hpp"
 using namespace std;
 
