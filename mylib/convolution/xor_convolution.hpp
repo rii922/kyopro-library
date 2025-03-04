@@ -1,7 +1,7 @@
 /**
  * @file xor_convolution.hpp
  * @author rii922
- * @brief Hadamard 変換にょって XOR convolution を行う。
+ * @brief 高速 Walsh-Hadamard 変換にょって XOR convolution を行う。
  * @date 2025-03-04
  *
  * Verified with:
@@ -14,7 +14,7 @@ using namespace std;
 /// EXPAND FROM HERE
 
 template<class T>
-void _hadamard(vector<T> &v) {
+void _walsh_hadamard(vector<T> &v) {
 	int e = __builtin_ctz(v.size());
 	int d = 1;
 	int n2 = 1 << e;
@@ -36,7 +36,7 @@ void _hadamard(vector<T> &v) {
 }
 
 /**
- * @brief Hadamard 変換にょって XOR convolution を行う。
+ * @brief 高速 Walsh-Hadamard 変換にょって XOR convolution を行う。
  *
  * O(N log N)
  * @tparam T 環
@@ -51,10 +51,10 @@ vector<T> xor_convolution(const vector<T> &a, const vector<T> &b) {
 	vector<T> a2(n2, 0), b2(n2, 0);
 	for (int i = 0; i < a.size(); i++) a2[i] = a[i];
 	for (int i = 0; i < b.size(); i++) b2[i] = b[i];
-	_hadamard(a2);
-	_hadamard(b2);
+	_walsh_hadamard(a2);
+	_walsh_hadamard(b2);
 	for (int i = 0; i < n2; i++) a2[i] *= b2[i];
-	_hadamard(a2);
+	_walsh_hadamard(a2);
 	for (int i = 0; i < n2; i++) a2[i] /= n2;
 	return a2;
 }
