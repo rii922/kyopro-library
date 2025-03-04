@@ -2,11 +2,12 @@
  * @file avl_tree.cpp
  * @author rii922
  * @brief `n` 番目に小さい要素を高速に求められるコンテナ。同じ要素の重複は取り除かない。
- * @date 2025-02-22
+ * @date 2025-03-04
  *
  * Verified with:
  * https://judge.yosupo.jp/submission/267681
  * https://atcoder.jp/contests/arc033/submissions/62727378
+ * https://judge.yosupo.jp/submission/271053
  */
 
 #include <bits/stdc++.h>
